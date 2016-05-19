@@ -41,24 +41,21 @@ body {
 	width: 				100%;
 	height: 			100%;
 	z-index: 			100;
-
-	background-color: 	rgba(11, 133, 161, 0.75);
+	background-color: 	rgba(61, 161, 49, 0.75);
 	color: 				#fff;
+	font: 				bold 3rem sans-serif;
 	text-align: 		center;
-	font: bold 			36px sans-serif;
 	line-height: 		90vh;
-
 	transition: 		0.4s;
 }
 
 #buffering {
 	position: 			absolute;
-	top:  				30vh;
+	top:  				40vh;
 	width: 				100%;
 	text-align:  		center;
 	color: 				#605555;
-	text-align: 		center;
-	font: 				bold 36px sans-serif;
+	font: 				bold 3rem sans-serif;
 	transition: 		0.4s;
 }
 

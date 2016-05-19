@@ -7,16 +7,14 @@ function fileHandle(event) {
     var file 	= null;
 
     for (var i=0; i<files.length; i++) {
-    	var file = files[i];
+    	file = files[i];
     	console.log('Name: ' + file.name);
     	//console.log('Type: ' + file.type);
     	//console.log('Size: ' + file.size);
     	//console.log('Last modified: ' + file.lastModifiedDate);
 
-    	if (file.type !== 'audio/mp3') {
-    		console.log('Not mp3');
-    		continue;
-		} else processFile(file);
+    	if (file.type !== 'audio/mp3') console.log('Not mp3');
+		else processFile(file);
     }
 }
 
@@ -34,7 +32,7 @@ function processFile(file) {
     	// ID3 tag info is in last 128 bytes
     	//var length = data.byteLength;
     	//readID3tags( new DataView(data, length-128, 128) );
-    	readID3tags(data);
+    	//readID3tags(data);
 
         context.decodeAudioData(data, function(buffer) {
         	playSong(buffer);
@@ -60,7 +58,7 @@ function playSong(buffer) {
 
 function changeVolume(element) {
 	var volume   = element.value;
-	var fraction = parseInt(element.value) / parseInt(element.max);
+	var fraction = parseInt(volume) / parseInt(element.max);
 
 	// x*x curve (x-squared). Simple linear (x) does not sound as good.
 	gainNode.gain.value = fraction * fraction;
@@ -93,8 +91,6 @@ function dropHandle(event) {
     dropHere.className += 'hidden';
 }
 
-
-var player 	 	= document.getElementById('player');
 var list 		= document.getElementById('list');
 var dropHere 	= document.getElementById('dropHereMsg');
 var buffering  	= document.getElementById('buffering');
@@ -104,16 +100,14 @@ var controls = {
 	playBtn: 	document.getElementById('playBtn'),
 	pauseBtn: 	document.getElementById('pauseBtn'),
 	stopBtn: 	document.getElementById('stopBtn'),
-	playBtn: 	document.getElementById('playBtn'),
 	forwardBtn: document.getElementById('forwardBtn')
-}
+};
 
 controls.playBtn.addEventListener('click', function() { context.resume(); } );
 controls.pauseBtn.addEventListener('click', function() { context.suspend(); } );
 
 var context 	= new AudioContext();
 var gainNode 	= context.createGain();
-var playing		= true;
 
 window.addEventListener('dragover', 	dragOverHandle, 	false);
 window.addEventListener('drop', 		dropHandle, 		false);
