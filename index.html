@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Music Player</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8">
+</head>
+
+<body>
+
+	<div id="controls">
+		<div id="backBtn" class="playerBtn">
+			<i class="fa fa-fast-backward"></i>
+		</div>
+		<div id="playBtn" class="playerBtn">
+			<i class="fa fa-play"></i>
+		</div>
+		<div id="pauseBtn" class="playerBtn">
+			<i class="fa fa-pause"></i>
+		</div>
+		<div id="stopBtn" class="playerBtn">
+			<i class="fa fa-stop"></i>
+		</div>
+		<div id="forwardBtn" class="playerBtn">
+			<i class="fa fa-fast-forward"></i>
+		</div>
+		<div id="volumeBtn" class="playerBtn">
+			<input type="range" min="0" max="100" value="100" 
+								oninput="changeVolume(this);">
+		</div>			
+	</div> <!-- /controls -->
+
+
+	<div id="player">
+		<div id="buffering" class="hidden">Buffering...</div>
+		<div id="dropHereMsg" class="hidden">Drop your mp3 files here</div>
+	</div> <!-- /player -->
+
+
+
+	
+	
+	<script src="readID3tags.js"></script>
+	<script src="main.js"></script>
+</body>
+</html>
