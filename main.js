@@ -14,7 +14,11 @@ function fileHandle(event) {
     	//console.log('Last modified: ' + file.lastModifiedDate);
 
     	if (file.type !== 'audio/mp3') console.log('Not mp3');
-		else processFile(file);
+		else {
+			playlist.push(file);
+			if (playlist.length === 1) processFile(file);
+
+		}
     }
 }
 
@@ -65,8 +69,6 @@ function changeVolume(element) {
 }
 
 
-
-
 /**
 *	Drag events
 **/
@@ -91,7 +93,6 @@ function dropHandle(event) {
     dropHere.className += 'hidden';
 }
 
-var list 		= document.getElementById('list');
 var dropHere 	= document.getElementById('dropHereMsg');
 var buffering  	= document.getElementById('buffering');
 
@@ -106,6 +107,8 @@ var controls = {
 controls.playBtn.addEventListener('click', function() { context.resume(); } );
 controls.pauseBtn.addEventListener('click', function() { context.suspend(); } );
 
+var playlist 	= [];
+
 var context 	= new AudioContext();
 var gainNode 	= context.createGain();
 
@@ -113,3 +116,5 @@ window.addEventListener('dragover', 	dragOverHandle, 	false);
 window.addEventListener('drop', 		dropHandle, 		false);
 window.addEventListener('dragleave',	dragLeaveHandle,	false);
 window.addEventListener('drop', 		fileHandle, 		false);
+
+
