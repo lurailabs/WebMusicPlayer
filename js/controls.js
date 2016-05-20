@@ -8,25 +8,12 @@ var controls = {
     playlistBtn:    document.getElementById('showPlaylistBtn')
 };
 
-var $playlistTitle = document.querySelector('#playlist h1');
 
-var $playlist 	= document.getElementById('playlist');
+controls.playlistBtn.addEventListener('click',  function() { playlistWidget.togglePlaylist(); } );
+controls.volumeBtn.addEventListener('input',    function() { changeVolume(this); });
+controls.playBtn.addEventListener('click',      function() { context.resume(); } );
+controls.pauseBtn.addEventListener('click',     function() { context.suspend(); } );
+controls.stopBtn.addEventListener('click',      function() {} );
+controls.backBtn.addEventListener('click',      function() {} );
+controls.forwardBtn.addEventListener('click',   function() {} );
 
-controls.volumeBtn.addEventListener('input', function() { changeVolume(this); });
-controls.playBtn.addEventListener('click',   function() { context.resume(); } );
-controls.pauseBtn.addEventListener('click',  function() { context.suspend(); } );
-controls.stopBtn.addEventListener('click', function() {} );
-controls.backBtn.addEventListener('click', function() {} );
-controls.forwardBtn.addEventListener('click', function() {} );
-
-/*
-    Toggles playlist column
- */
-controls.playlistBtn.addEventListener('click', togglePlaylist );
-$playlistTitle.addEventListener('click', togglePlaylist );
-
-function togglePlaylist() {
-    $playlist.classList.contains('hidden') ?
-        $playlist.classList.remove('hidden') :
-        $playlist.classList.add('hidden');
-}

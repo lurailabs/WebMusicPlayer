@@ -45,9 +45,10 @@ function changeVolume(element) {
 	gainNode.gain.value = fraction * fraction;
 }
 
-var playlist    = new Playlist();
-var context 	= new AudioContext();
-var gainNode 	= context.createGain();
+var playlistWidget  = new PlaylistWidget();
+var playlist        = new Playlist();
+var context 	    = new AudioContext();
+var gainNode 	    = context.createGain();
 
 
 

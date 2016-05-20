@@ -12,6 +12,7 @@ body {
     bottom:             0;
     right:              0;
     left:               0;
+    overflow:hidden;
 }
 
 #controls {
@@ -72,26 +73,16 @@ body {
     border-left:        red;
     background-color:   white;
     position:           absolute;
+    height:             100%;
     top:                0;
     right:              0;
-    bottom:             0;
+    overflow:           auto;
 }
 
 .playlist > h1 {
     text-align:         center;
     border-bottom:      solid 1px darkgray;
     padding-bottom:     20px;
-}
-
-.playlist > h1::before {
-    content:            'x';
-    position:           absolute;
-    left:               15px;
-    top:                5px;
-}
-
-.playlist > h1:hover::before {
-    color:              #9C1212;
 }
 
 .playlist .song {

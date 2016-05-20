@@ -20,6 +20,7 @@ function fileHandle(event) {
         if (file.type !== 'audio/mp3') console.log('Not mp3');
         else {
             playlist.addSong(file);
+            playlistWidget.addSong(file);
             if (playlist.getSize() === 1) processFile(file);
 
         }
