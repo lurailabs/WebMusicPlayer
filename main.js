@@ -53,6 +53,7 @@ function playSong(buffer) {
     source.buffer 	= buffer;
 	// Connect the source to the gain node.
 	source.connect(gainNode);
+	source.onended = function() { console.log('song finished') };
 	// Connect the gain node to the destination.
 	gainNode.connect(context.destination);
     source.start(0);
@@ -101,11 +102,13 @@ var controls = {
 	playBtn: 	document.getElementById('playBtn'),
 	pauseBtn: 	document.getElementById('pauseBtn'),
 	stopBtn: 	document.getElementById('stopBtn'),
-	forwardBtn: document.getElementById('forwardBtn')
+	forwardBtn: document.getElementById('forwardBtn'),
+	volumeBtn:	document.getElementById('volumeBtn')
 };
 
-controls.playBtn.addEventListener('click', function() { context.resume(); } );
-controls.pauseBtn.addEventListener('click', function() { context.suspend(); } );
+controls.playBtn.addEventListener('click',   function() { context.resume(); } );
+controls.pauseBtn.addEventListener('click',  function() { context.suspend(); } );
+controls.volumeBtn.addEventListener('input', function() { changeVolume(this); });
 
 var playlist 	= [];
 
