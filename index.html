@@ -3,7 +3,7 @@
 <head>
 	<title>Web Music Player</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<meta charset="utf-8">
 </head>
 
@@ -28,19 +28,37 @@
 
 		<input id="volumeBtn" title="volume" type="range" min="0" max="100" value="100">
 
+        <div id="showPlaylistBtn" class="playerBtn">
+            PLAYLIST
+        </div>
+
 	</div> <!-- /controls -->
 
 
 	<div id="player">
+
 		<div id="buffering" class="hidden">Buffering...</div>
 		<div id="dropHereMsg" class="hidden">Drop your mp3 files here</div>
+
+        <div id="playlist" class="playlist hidden">
+            <h1>Playlist</h1>
+            <div class="song">
+                <p class="title">...And Justice For All</p>
+                <p class="artist">Metallica</p>
+            </div>
+            <div class="song">
+                <p class="title">Blackened</p>
+                <p class="artist">Metallica</p>
+            </div>
+        </div> <!-- /playlist -->
+
 	</div> <!-- /player -->
 
 
 
-	
-	
-	<script src="readID3tags.js"></script>
-	<script src="main.js"></script>
+    <script src="js/Playlist.js"></script>
+    <script src="js/dragEvents.js"></script>
+	<script src="js/controls.js"></script>
+	<script src="js/main.js"></script>
 </body>
 </html>

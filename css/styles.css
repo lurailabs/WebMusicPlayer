@@ -1,0 +1,114 @@
+body {
+    background-color:   #473C3C;
+    margin:             0;
+    padding:            0;
+    font-family:        sans-serif;
+}
+
+#player {
+    border-top:         solid 1px red;
+    position:           absolute;
+    top:                60px;
+    bottom:             0;
+    right:              0;
+    left:               0;
+}
+
+#controls {
+    background-color:   #E6E6E6;
+    height:             60px;
+    display:            flex;
+    flex-wrap:          wrap;
+    align-items:        center;         /* vertical align */
+    justify-content:    space-around;   /* horizontal align */
+
+}
+
+.playerBtn {
+    flex-basis:         50px;
+}
+
+.playerBtn:hover {
+    color:              #9C1212;
+}
+
+
+#dropHereMsg {
+    width:              100%;
+    height:             100%;
+    z-index:            10;
+    background-color:   rgba(61, 161, 49, 0.75);
+    color:              #fff;
+    font:               bold 3rem sans-serif;
+    text-align:         center;
+    line-height:        90vh;
+    transition:         0.4s;
+}
+
+#buffering {
+    position:           absolute;
+    top:                40vh;
+    width:              100%;
+    text-align:         center;
+    color:              #605555;
+    font:               bold 3rem sans-serif;
+    transition:         0.4s;
+}
+
+#dropHereMsg.hidden,
+#buffering.hidden {
+    opacity:            0;
+    pointer-events:     none;
+    transition:         0.6s;
+}
+
+
+/*
+    PLAYLIST COLUMN
+*/
+
+.playlist {
+    width:              40vh;
+    border-left:        red;
+    background-color:   white;
+    position:           absolute;
+    top:                0;
+    right:              0;
+    bottom:             0;
+}
+
+.playlist > h1 {
+    text-align:         center;
+    border-bottom:      solid 1px darkgray;
+    padding-bottom:     20px;
+}
+
+.playlist > h1::before {
+    content:            'x';
+    position:           absolute;
+    left:               15px;
+    top:                5px;
+}
+
+.playlist > h1:hover::before {
+    color:              #9C1212;
+}
+
+.playlist .song {
+    padding:            20px;
+    border-bottom:      solid 1px darkgray;
+}
+
+.playlist .title {
+    font-weight:        bold;
+    font-size:          larger;
+}
+
+#playlist .artist {
+    font-size:          1rem;
+    color:              #535353;
+}
+
+.hidden {
+    display: none;
+}
