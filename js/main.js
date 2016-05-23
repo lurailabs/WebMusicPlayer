@@ -1,19 +1,14 @@
 
-
 function processFile(file) {
 
 	$buffering.className = '';
 
+    if (!context) context = new AudioContext();
 	var reader 	= new FileReader();
     
     reader.addEventListener('load', function(event) {
     	var data = event.target.result;
-    	
-    	// ID3 tag info is in last 128 bytes
-    	//var length = data.byteLength;
-    	//readID3tags( new DataView(data, length-128, 128) );
-    	//readID3tags(data);
-
+		
         context.decodeAudioData(data, function(buffer) {
         	playSong(buffer);
         });
@@ -25,7 +20,10 @@ function processFile(file) {
 
 
 function playSong(buffer) {
-	var source 		= context.createBufferSource();
+    if (source.buffer) {
+        source.stop();
+        source = context.createBufferSource();
+    }
     source.buffer 	= buffer;
 	// Connect the source to the gain node.
 	source.connect(gainNode);
@@ -33,6 +31,8 @@ function playSong(buffer) {
 	// Connect the gain node to the destination.
 	gainNode.connect(context.destination);
     source.start(0);
+    console.log('Playlist size: ' + playlist.getSize());
+    console.log('Current song: ' + playlist.getCurrentSong().name);
     $buffering.className += 'hidden';
 }
 
@@ -49,6 +49,7 @@ var playlistWidget  = new PlaylistWidget();
 var playlist        = new Playlist();
 var context 	    = new AudioContext();
 var gainNode 	    = context.createGain();
+var source 		    = context.createBufferSource();
 
 
 

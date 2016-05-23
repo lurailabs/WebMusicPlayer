@@ -1,11 +1,12 @@
 
 var PlaylistWidget = function() {
-    // var $playlistTitle  = document.querySelector('#playlist h1');
+ 
     var $playlist 	    = document.getElementById('playlist');
 
     /*
      Toggles playlist widget
      */
+    // var $playlistTitle  = document.querySelector('#playlist h1');
     // $playlistTitle.addEventListener('click', function(){ playlistWidget.togglePlaylist(); } );
 
     var togglePlaylist = function() {

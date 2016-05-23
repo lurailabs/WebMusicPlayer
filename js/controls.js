@@ -13,7 +13,15 @@ controls.playlistBtn.addEventListener('click',  function() { playlistWidget.togg
 controls.volumeBtn.addEventListener('input',    function() { changeVolume(this); });
 controls.playBtn.addEventListener('click',      function() { context.resume(); } );
 controls.pauseBtn.addEventListener('click',     function() { context.suspend(); } );
-controls.stopBtn.addEventListener('click',      function() {} );
-controls.backBtn.addEventListener('click',      function() {} );
-controls.forwardBtn.addEventListener('click',   function() {} );
+controls.stopBtn.addEventListener('click',      function() { source.stop(); } );
+
+controls.backBtn.addEventListener('click',      function() {
+    var previousSong = playlist.getPreviousSong();
+    if (previousSong) processFile(previousSong);
+});
+
+controls.forwardBtn.addEventListener('click',   function() {
+    var nextSong = playlist.getNextSong();
+    if (nextSong) processFile(nextSong);
+} );
 
