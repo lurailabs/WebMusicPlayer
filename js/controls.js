@@ -17,11 +17,19 @@ controls.stopBtn.addEventListener('click',      function() { source.stop(); } );
 
 controls.backBtn.addEventListener('click',      function() {
     var previousSong = playlist.getPreviousSong();
-    if (previousSong) processFile(previousSong);
+    if (previousSong) {
+        playlist.setCurrentSong(previousSong);
+        source.stop();
+    }
+    //if (previousSong) processSong(previousSong);
 });
 
 controls.forwardBtn.addEventListener('click',   function() {
     var nextSong = playlist.getNextSong();
-    if (nextSong) processFile(nextSong);
+    if (nextSong) {
+        playlist.setCurrentSong(nextSong);
+        source.stop();
+    }
+    //if (nextSong) processSong(nextSong);
 } );
 

@@ -1,5 +1,7 @@
 
-function processFile(file) {
+function processSong(song) {
+    
+    var file = song.getFile();
 
 	$buffering.className = '';
 
@@ -20,21 +22,25 @@ function processFile(file) {
 
 
 function playSong(buffer) {
-    if (source.buffer) {
-        source.stop();
-        source = context.createBufferSource();
-    }
     source.buffer 	= buffer;
-	// Connect the source to the gain node.
 	source.connect(gainNode);
-	source.onended = function() { console.log('song finished') };
-	// Connect the gain node to the destination.
+    
+	source.onended = function() {
+        console.log('song finished');
+        var newSong = playlist.getCurrentSong();
+        if (newSong) {
+            source = context.createBufferSource();
+            processSong(newSong);
+        }
+    };
+
 	gainNode.connect(context.destination);
     source.start(0);
     console.log('Playlist size: ' + playlist.getSize());
-    console.log('Current song: ' + playlist.getCurrentSong().name);
+    console.log('Current song: ' + playlist.getCurrentSong().getName());
     $buffering.className += 'hidden';
 }
+
 
 
 function changeVolume(element) {

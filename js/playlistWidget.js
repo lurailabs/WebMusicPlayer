@@ -2,12 +2,8 @@
 var PlaylistWidget = function() {
  
     var $playlist 	    = document.getElementById('playlist');
+    var songs = [];
 
-    /*
-     Toggles playlist widget
-     */
-    // var $playlistTitle  = document.querySelector('#playlist h1');
-    // $playlistTitle.addEventListener('click', function(){ playlistWidget.togglePlaylist(); } );
 
     var togglePlaylist = function() {
         $playlist.classList.contains('hidden') ?
@@ -17,11 +13,13 @@ var PlaylistWidget = function() {
 
     var addSong = function(song) {
         var newSong =  '<div class="song">' +
-            '<p class="title">'  + song.name  + '</p>' +
+            '<p class="title">'  + song.getName()  + '</p>' +
             '<p class="artist">' + '---' + '</p>' +
             '</div>';
         $playlist.innerHTML += newSong;
+        songs.push(song.name);
     };
+
 
     return {
         togglePlaylist: togglePlaylist,

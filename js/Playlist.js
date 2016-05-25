@@ -70,6 +70,7 @@ var Playlist = function() {
         getSize:            getSize,
         getPreviousSong:    getPreviousSong,
         getNextSong:        getNextSong,
+        setCurrentSong:     setCurrentSong,
         getCurrentSong:     getCurrentSong
     }
 };

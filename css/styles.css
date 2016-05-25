@@ -100,6 +100,10 @@ body {
     color:              #535353;
 }
 
+#playlist .playing {
+    background-color:   #E6E6E6;
+}
+
 .hidden {
     display: none;
 }
