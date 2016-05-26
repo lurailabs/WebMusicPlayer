@@ -33,6 +33,10 @@ body {
     color:              #9C1212;
 }
 
+#controls .disabled {
+    color:              #b1b1b1;
+}
+
 
 #dropHereMsg {
     width:              100%;

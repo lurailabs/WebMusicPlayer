@@ -1,4 +1,3 @@
-
 function processSong(song) {
     
     var file = song.getFile();
@@ -20,18 +19,13 @@ function processSong(song) {
 }
 
 
-
 function playSong(buffer) {
+    naturalFlow = true;
     source.buffer 	= buffer;
 	source.connect(gainNode);
     
 	source.onended = function() {
-        console.log('song finished');
-        var newSong = playlist.getCurrentSong();
-        if (newSong) {
-            source = context.createBufferSource();
-            processSong(newSong);
-        }
+        stopEventHandler();
     };
 
 	gainNode.connect(context.destination);
@@ -41,6 +35,20 @@ function playSong(buffer) {
     $buffering.className += 'hidden';
 }
 
+
+function stopEventHandler() {
+    console.log('song finished - natural flow: ' + naturalFlow);
+
+    if (naturalFlow) {              // song ends by itself, not forced by user. We must set next song.
+        playlist.setCurrentSong(playlist.getNextSong());
+    }
+
+    var newSong = playlist.getCurrentSong();
+    if (newSong) {
+        source = context.createBufferSource();
+        processSong(newSong);
+    }
+}
 
 
 function changeVolume(element) {
@@ -56,6 +64,7 @@ var playlist        = new Playlist();
 var context 	    = new AudioContext();
 var gainNode 	    = context.createGain();
 var source 		    = context.createBufferSource();
+var naturalFlow     = true;         // true when no jumps in songs are made by user clicking stop/back/ff btns
 
 
 
