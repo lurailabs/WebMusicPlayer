@@ -30,6 +30,8 @@
 
         <div id="showPlaylistBtn" class="playerBtn">PLAYLIST</div>
 
+		<input id="positionSlider" class="slider" title="position" type="range" min="0" max="500" value="0">
+
 	</div> <!-- /controls -->
 
 
@@ -38,17 +40,18 @@
 		<div id="buffering" class="hidden">Buffering...</div>
 		<div id="dropHereMsg" class="hidden">Drop your mp3 files here</div>
 
+        <audio id="audio" src="" >
+            Your browser does not support the <code>audio</code> element.
+        </audio>
+
         <div id="playlist" class="playlist hidden">
             <h1>Playlist</h1>
-
         </div> <!-- /playlist -->
 
 	</div> <!-- /player -->
 
 	<script src="js/Song.js"></script>
-    <script src="js/playlistWidget.js"></script>
     <script src="js/Playlist.js"></script>
-    <script src="js/dragEvents.js"></script>
     <script src="js/controls.js"></script>
     <script src="js/main.js"></script>
 </body>

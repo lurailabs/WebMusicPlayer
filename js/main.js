@@ -1,70 +1,60 @@
-function processSong(song) {
-    
-    var file = song.getFile();
+/**
+ *	Drag events
+ **/
 
-	$buffering.className = '';
+function fileHandle(event) {
 
-    if (!context) context = new AudioContext();
-	var reader 	= new FileReader();
-    
-    reader.addEventListener('load', function(event) {
-    	var data = event.target.result;
-		
-        context.decodeAudioData(data, function(buffer) {
-        	playSong(buffer);
-        });
-        
-    });
-    reader.readAsArrayBuffer(file);
-}
+    var files 	= event.dataTransfer.files;
+    var file 	= null;
 
+    for (var i=0; i<files.length; i++) {
+        file = files[i];
+        console.log('Name: ' + file.name);
 
-function playSong(buffer) {
-    naturalFlow = true;
-    source.buffer 	= buffer;
-	source.connect(gainNode);
-    
-	source.onended = function() {
-        stopEventHandler();
-    };
-
-	gainNode.connect(context.destination);
-    source.start(0);
-    console.log('Playlist size: ' + playlist.getSize());
-    console.log('Current song: ' + playlist.getCurrentSong().getName());
-    $buffering.className += 'hidden';
-}
-
-
-function stopEventHandler() {
-    console.log('song finished - natural flow: ' + naturalFlow);
-
-    if (naturalFlow) {              // song ends by itself, not forced by user. We must set next song.
-        playlist.setCurrentSong(playlist.getNextSong());
-    }
-
-    var newSong = playlist.getCurrentSong();
-    if (newSong) {
-        source = context.createBufferSource();
-        processSong(newSong);
+        if (file.type !== 'audio/mp3') console.log('Not mp3');
+        else {
+            var song = new Song(file);
+            playlist.addSong(song);
+            var currentSong = playlist.getCurrentSong();
+            if (currentSong) {
+                $audio.src = currentSong.getBlobUrl();
+                $audio.oncanplay = function() { $audio.play(); };
+            }
+        }
     }
 }
 
-
-function changeVolume(element) {
-	var volume   = element.value;
-	var fraction = parseInt(volume) / parseInt(element.max);
-
-	// x*x curve (x-squared). Simple linear (x) does not sound as good.
-	gainNode.gain.value = fraction * fraction;
+function dragOverHandle(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    $dropHere.className = '';
+    event.dataTransfer.dropEffect = 'copy';
 }
 
-var playlistWidget  = new PlaylistWidget();
+
+function dragLeaveHandle(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    $dropHere.className += 'hidden';
+}
+
+function dropHandle(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    $dropHere.className += 'hidden';
+    fileHandle(event);
+}
+
+
+window.addEventListener('dragover', 	dragOverHandle, 	false);
+window.addEventListener('dragleave',	dragLeaveHandle,	false);
+window.addEventListener('drop', 		dropHandle, 		false);
+
+
 var playlist        = new Playlist();
-var context 	    = new AudioContext();
-var gainNode 	    = context.createGain();
-var source 		    = context.createBufferSource();
-var naturalFlow     = true;         // true when no jumps in songs are made by user clicking stop/back/ff btns
+
+var $dropHere 	    = document.getElementById('dropHereMsg');
+var $audio          = document.getElementById('audio');
 
 
 

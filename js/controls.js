@@ -6,54 +6,51 @@ var controls = {
     forwardBtn:     document.getElementById('forwardBtn'),
     volumeBtn:	    document.getElementById('volumeBtn'),
     playlistBtn:    document.getElementById('showPlaylistBtn'),
+    
+    positionSlider: document.getElementById('positionSlider')
 
-    disable:        function(btn) { controls[btn].classList.add('disabled'); },
-    enable:         function(btn) { controls[btn].classList.remove('disabled'); }
 };
 
 
 controls.playlistBtn.addEventListener('click',  function() {
-    playlistWidget.togglePlaylist();
+    playlist.togglePlaylist();
 } );
 
 controls.volumeBtn.addEventListener('input',    function() {
-    changeVolume(this);
+    //changeVolume(this);
 });
 
 controls.playBtn.addEventListener('click',      function() {
-    context.resume();
+    $audio.play();
 } );
 
 controls.pauseBtn.addEventListener('click',     function() {
-    context.suspend();
+    $audio.pause();
 } );
 
 controls.stopBtn.addEventListener('click',      function() {
-    if (source.buffer) {
-        playlist.setCurrentSong(null);
-        naturalFlow = false;
-        source.stop();
-    }
+
 } );
 
 controls.backBtn.addEventListener('click',      function() {
-    if (source.buffer) {
-        var previousSong = playlist.getPreviousSong();
-        if (previousSong) {
-            playlist.setCurrentSong(previousSong);
-            naturalFlow = false;
-            source.stop();
-        }
+    
+    var song = playlist.goBack();
+    if (song) {
+        $audio.src = song.getBlobUrl();
+        $audio.play();
     }
 });
 
 controls.forwardBtn.addEventListener('click',   function() {
-    if (source.buffer) {
-        var nextSong = playlist.getNextSong();
-        if (nextSong) {
-            playlist.setCurrentSong(nextSong);
-            naturalFlow = false;
-            source.stop();
-        }
+    var song = playlist.goForward();
+    if (song) {
+        $audio.src = song.getBlobUrl();
+        $audio.play();
     }
 } );
+
+controls.positionSlider.addEventListener('input', function() {
+    $audio.currentTime = ($audio.duration * this.value) / this.max;
+});
+
+

@@ -1,17 +1,22 @@
 var Song = function(file) {
-    var file = file;
-    var name = file.name;
+    var blobUrl     = URL.createObjectURL(file);
+    var fileName    = file.name;
+    var title;
     var artist;
     var image;
-
-    var getFile = function() {
-        return file;
+    
+    var getBlobUrl = function() {
+        return blobUrl;
     };
     
-    var getName = function() {
-        return name;
+    var getFileName = function() {
+        return fileName;
     };
 
+    var getTitle = function() {
+        return title;
+    };
+    
     var getArtist = function() {
         return artist;
     };
@@ -23,9 +28,9 @@ var Song = function(file) {
     
     
     return {
-        getFile:    getFile,
-        getName:    getName,
-        getArtist:  getArtist,
-        getImage:   getImage
+        getBlobUrl:     getBlobUrl,
+        getFileName:    getFileName,
+        getArtist:      getArtist,
+        getImage:       getImage
     }
 };

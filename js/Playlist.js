@@ -1,76 +1,68 @@
 var Playlist = function() {
-    var songs = [];
-    var currentSong = null;
-    var size = songs.length;
 
-    var getSize = function() {
-        return size;
-    };
-
-    var getCurrentSong = function() {
-        return currentSong;
-    };
-
-    var setCurrentSong = function(song) {
-        currentSong = song;
-    };
-    
-    var getPreviousSong = function() {
-        if (currentSong === songs[0]) return;
-        var currentIndex = getIndex(currentSong);
-        currentSong = songs[currentIndex-1];
-        return songs[currentIndex-1];
-    };
-    
-    var getNextSong = function() {
-        if (currentSong === songs[songs.length-1]) return;
-        var currentIndex = getIndex(currentSong);
-        currentSong = songs[currentIndex+1];
-        return songs[currentIndex+1];
-    };
+    var songs               = [];
+    var currentSongIndex    = null;
+    var $playlist 	        = document.getElementById('playlist');
 
     var addSong = function(song) {
         songs.push(song);
-        size++;
-        if (size === 1) currentSong = song;
+        addToPlaylistWidget(song);
+        if (songs.length === 1) currentSongIndex = 0;
+    };
+    
+    var getCurrentSong = function() {
+      if (currentSongIndex !== null) return songs[currentSongIndex];  
     };
 
-    var getIndex = function(song) {
-        for (var i = 0; i < songs.length; i++) {
-            if (songs[i] === song) return i;
+    var goBack = function() {
+        if (currentSongIndex === 0) return;
+        currentSongIndex -= 1;
+        return songs[currentSongIndex];
+    };
+
+    var goForward = function() {
+        if (currentSongIndex === songs.length-1) return;
+        currentSongIndex += 1;
+        return songs[currentSongIndex];
+    };
+    
+    
+    
+    /**   PLAYLIST WIDGET   **/
+    
+    var addToPlaylistWidget = function(song) {
+        $playlist.innerHTML +=
+            '<div class="song">' +
+            '<p class="title">'  + song.getFileName()  + '</p>' +
+            '<p class="artist">' + '---' + '</p>' +
+            '</div>';
+    };
+
+    var redrawPlaylistWidget = function() {
+        $playlist.innerHTML = '';
+        for (var i=0, j=songs.length; i<j; i++) {
+            $playlist.innerHTML += 
+                '<div class="song">' +
+                    '<p class="title">'  + songs[i].getFileName()  + '</p>' +
+                    '<p class="artist">' + '---' + '</p>' +
+                '</div>';
         }
     };
 
-    /*
-     var removeSong = function(song) {
-         var songIndex = getIndex(song);
-         if (currentSong === song) {
-         currentSong = (songIndex + 1) < size ? songs[songIndex+1] : null;
-         }
-         songs.splice(songIndex, 1);
-         size--;
-     };
-     
-     var moveSongUp = function(song) {
-         var songIndex = getIndex(song);
-         if (songIndex === 0) return;
-         songs.splice(songIndex-1, 0, song);
-     };
+    var togglePlaylist = function() {
+        $playlist.classList.contains('hidden') ?
+            $playlist.classList.remove('hidden') :
+            $playlist.classList.add('hidden');
+    };
 
-     var moveSongDown = function(song) {
-         var songIndex = getIndex(song);
-         if (songIndex === size-1) return;
-         songs.splice(songIndex+1, 0, song);
 
-     };
-     */
-    
+
+
     return {
-        addSong:            addSong,
-        getSize:            getSize,
-        getPreviousSong:    getPreviousSong,
-        getNextSong:        getNextSong,
-        setCurrentSong:     setCurrentSong,
-        getCurrentSong:     getCurrentSong
+        addSong:        addSong,
+        getCurrentSong: getCurrentSong,
+        goBack:         goBack,
+        goForward:      goForward,
+        togglePlaylist: togglePlaylist
     }
 };

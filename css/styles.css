@@ -8,25 +8,29 @@ body {
 #player {
     border-top:         solid 1px red;
     position:           absolute;
-    top:                60px;
+    top:                100px;
     bottom:             0;
     right:              0;
     left:               0;
-    overflow:hidden;
+    overflow:           hidden;
 }
 
 #controls {
     background-color:   #E6E6E6;
-    height:             60px;
+    height:             80px;
+    padding-top:        20px;
     display:            flex;
     flex-wrap:          wrap;
     align-items:        center;         /* vertical align */
     justify-content:    space-around;   /* horizontal align */
-
 }
 
 .playerBtn {
     flex-basis:         50px;
+}
+
+.slider {
+    min-width:          93%;
 }
 
 .playerBtn:hover {
@@ -109,5 +113,5 @@ body {
 }
 
 .hidden {
-    display: none;
+    display:            none;
 }
