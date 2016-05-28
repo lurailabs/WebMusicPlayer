@@ -63,6 +63,11 @@ $audio.onended = function() {
     }
 };
 
+$audio.onplay = function() {
+    controls.playBtn.classList.add('hidden');
+    controls.pauseBtn.classList.remove('hidden');
+};
+
 $audio.ontimeupdate = function() {
       controls.positionSlider.value = ($audio.currentTime * controls.positionSlider.max) / $audio.duration;
 };

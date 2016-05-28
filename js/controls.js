@@ -21,11 +21,17 @@ controls.volumeBtn.addEventListener('input',    function() {
 });
 
 controls.playBtn.addEventListener('click',      function() {
-    if ($audio.src) $audio.play();
+    if ($audio.src) {
+        $audio.play();
+        controls.playBtn.classList.add('hidden');
+        controls.pauseBtn.classList.remove('hidden');
+    }
 } );
 
 controls.pauseBtn.addEventListener('click',     function() {
     $audio.pause();
+    controls.playBtn.classList.remove('hidden');
+    controls.pauseBtn.classList.add('hidden');
 } );
 
 controls.backBtn.addEventListener('click',      function() {
