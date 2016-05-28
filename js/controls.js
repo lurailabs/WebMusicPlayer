@@ -17,7 +17,7 @@ controls.playlistBtn.addEventListener('click',  function() {
 } );
 
 controls.volumeBtn.addEventListener('input',    function() {
-    //changeVolume(this);
+    if($audio.src) $audio.volume = this.value / this.max;
 });
 
 controls.playBtn.addEventListener('click',      function() {
@@ -29,7 +29,7 @@ controls.pauseBtn.addEventListener('click',     function() {
 } );
 
 controls.backBtn.addEventListener('click',      function() {
-    
+    if (!$audio.src) return;
     var song = playlist.goBack();
     if (song) {
         $audio.src = song.getBlobUrl();
@@ -38,6 +38,7 @@ controls.backBtn.addEventListener('click',      function() {
 });
 
 controls.forwardBtn.addEventListener('click',   function() {
+    if (!$audio.src) return;
     var song = playlist.goForward();
     if (song) {
         $audio.src = song.getBlobUrl();
