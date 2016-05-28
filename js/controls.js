@@ -21,15 +21,11 @@ controls.volumeBtn.addEventListener('input',    function() {
 });
 
 controls.playBtn.addEventListener('click',      function() {
-    $audio.play();
+    if ($audio.src) $audio.play();
 } );
 
 controls.pauseBtn.addEventListener('click',     function() {
     $audio.pause();
-} );
-
-controls.stopBtn.addEventListener('click',      function() {
-
 } );
 
 controls.backBtn.addEventListener('click',      function() {
@@ -50,7 +46,7 @@ controls.forwardBtn.addEventListener('click',   function() {
 } );
 
 controls.positionSlider.addEventListener('input', function() {
-    $audio.currentTime = ($audio.duration * this.value) / this.max;
+    if($audio.src) $audio.currentTime = ($audio.duration * this.value) / this.max;
 });
 
 

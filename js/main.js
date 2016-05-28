@@ -46,7 +46,6 @@ function dropHandle(event) {
 }
 
 
-
 window.addEventListener('dragover', 	dragOverHandle, 	false);
 window.addEventListener('dragleave',	dragLeaveHandle,	false);
 window.addEventListener('drop', 		dropHandle, 		false);

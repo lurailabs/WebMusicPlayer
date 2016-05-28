@@ -37,8 +37,14 @@ body {
     color:              #9C1212;
 }
 
-#controls .disabled {
-    color:              #b1b1b1;
+.btnInfo {
+    color:              #8f8f8f;
+    position:           absolute;
+    display:            none;
+}
+
+.playerBtn:hover .btnInfo {
+    display: block;
 }
 
 
@@ -52,23 +58,6 @@ body {
     text-align:         center;
     line-height:        90vh;
     transition:         0.4s;
-}
-
-#buffering {
-    position:           absolute;
-    top:                40vh;
-    width:              100%;
-    text-align:         center;
-    color:              #605555;
-    font:               bold 3rem sans-serif;
-    transition:         0.4s;
-}
-
-#dropHereMsg.hidden,
-#buffering.hidden {
-    opacity:            0;
-    pointer-events:     none;
-    transition:         0.6s;
 }
 
 

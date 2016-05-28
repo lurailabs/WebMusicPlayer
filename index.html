@@ -12,23 +12,30 @@
 	<div id="controls">
 		<div id="backBtn" class="playerBtn">
 			<i class="fa fa-fast-backward"></i>
+            <span class="btnInfo">previous song</span>
 		</div>
 		<div id="playBtn" class="playerBtn">
 			<i class="fa fa-play"></i>
+            <span class="btnInfo">play</span>
 		</div>
 		<div id="pauseBtn" class="playerBtn">
 			<i class="fa fa-pause"></i>
-		</div>
-		<div id="stopBtn" class="playerBtn">
-			<i class="fa fa-stop"></i>
+            <span class="btnInfo">pause</span>
 		</div>
 		<div id="forwardBtn" class="playerBtn">
 			<i class="fa fa-fast-forward"></i>
+            <span class="btnInfo">next song</span>
 		</div>
 
-		<input id="volumeBtn" title="volume" type="range" min="0" max="100" value="100">
+        <div class="playerBtn">
+            <input id="volumeBtn" title="volume" type="range" min="0" max="100" value="100">
+            <span class="btnInfo">volume</span>
+        </div>
 
-        <div id="showPlaylistBtn" class="playerBtn">PLAYLIST</div>
+        <div id="showPlaylistBtn" class="playerBtn">
+            PLAYLIST
+            <span class="btnInfo">toggle playlist</span>
+        </div>
 
 		<input id="positionSlider" class="slider" title="position" type="range" min="0" max="500" value="0">
 
@@ -37,10 +44,9 @@
 
 	<div id="player">
 
-		<div id="buffering" class="hidden">Buffering...</div>
 		<div id="dropHereMsg" class="hidden">Drop your music files here</div>
 
-        <audio id="audio" src="" >
+        <audio id="audio">
             Your browser does not support the <code>audio</code> element.
         </audio>
 
