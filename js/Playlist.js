@@ -32,11 +32,7 @@ var Playlist = function() {
 
     var setCurrentSongIndex = function(index) {
         currentSongIndex = index;
-        // change background color
-        var $currentSong  = $playlist.getElementsByClassName('song')[index];
-        var $previousSong = $playlist.getElementsByClassName('playing')[0];
-        if($previousSong) $previousSong.classList.remove('playing');
-        $currentSong.classList.add('playing')
+        changeSongBgcolor(index);
     };
     
     
@@ -48,6 +44,13 @@ var Playlist = function() {
             '<p class="title">'  + song.getFileName()  + '</p>' +
             '<p class="artist">' + '---' + '</p>' +
             '</div>';
+    };
+
+    var changeSongBgcolor = function(index) {
+        var $currentSong  = $playlist.getElementsByClassName('song')[index];
+        var $previousSong = $playlist.getElementsByClassName('playing')[0];
+        if($previousSong) $previousSong.classList.remove('playing');
+        $currentSong.classList.add('playing');
     };
 
     var redrawPlaylistWidget = function() {
