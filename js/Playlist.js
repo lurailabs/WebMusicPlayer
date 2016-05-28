@@ -70,7 +70,15 @@ var Playlist = function() {
             $playlist.classList.add('hidden');
     };
 
-
+    $playlist.addEventListener('click', function(e) {
+        var $song = e.target.closest('.song');  // closest is experimental. Not working on IE
+        if ($song) {
+            var index = Array.prototype.indexOf.call($playlist.children, $song);
+            setCurrentSongIndex(index - 1);
+            $audio.src = songs[currentSongIndex].getBlobUrl();
+            $audio.play();
+        }
+    });
 
 
     return {
@@ -79,5 +87,5 @@ var Playlist = function() {
         goBack:         goBack,
         goForward:      goForward,
         togglePlaylist: togglePlaylist
-    }
+    };
 };
