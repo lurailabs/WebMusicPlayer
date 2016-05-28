@@ -4,7 +4,7 @@ var $dropHere 	    = document.getElementById('dropHereMsg');
 var $audio          = document.getElementById('audio');
 
 /**
- *	Drag events
+ *	FILE DRAG & DROP EVENTS
  **/
 
 function fileHandle(event) {
@@ -52,7 +52,9 @@ window.addEventListener('dragleave',	dragLeaveHandle,	false);
 window.addEventListener('drop', 		dropHandle, 		false);
 
 
-
+/**
+ *	AUDIO TAG EVENTS
+ **/
 
 $audio.onended = function() {
     var song = playlist.goForward();
@@ -60,6 +62,10 @@ $audio.onended = function() {
         $audio.src = song.getBlobUrl();
         $audio.play();
     }
+};
+
+$audio.ontimeupdate = function() {
+      controls.positionSlider.value = ($audio.currentTime * controls.positionSlider.max) / $audio.duration;
 };
 
 
