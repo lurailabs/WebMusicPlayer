@@ -1,3 +1,8 @@
+var playlist        = new Playlist();
+
+var $dropHere 	    = document.getElementById('dropHereMsg');
+var $audio          = document.getElementById('audio');
+
 /**
  *	Drag events
  **/
@@ -15,11 +20,6 @@ function fileHandle(event) {
         else {
             var song = new Song(file);
             playlist.addSong(song);
-            var currentSong = playlist.getCurrentSong();
-            if (currentSong) {
-                $audio.src = currentSong.getBlobUrl();
-                $audio.oncanplay = function() { $audio.play(); };
-            }
         }
     }
 }
@@ -46,16 +46,20 @@ function dropHandle(event) {
 }
 
 
+
 window.addEventListener('dragover', 	dragOverHandle, 	false);
 window.addEventListener('dragleave',	dragLeaveHandle,	false);
 window.addEventListener('drop', 		dropHandle, 		false);
 
 
-var playlist        = new Playlist();
-
-var $dropHere 	    = document.getElementById('dropHereMsg');
-var $audio          = document.getElementById('audio');
 
 
+$audio.onended = function() {
+    var song = playlist.goForward();
+    if (song) {
+        $audio.src = song.getBlobUrl();
+        $audio.play();
+    }
+};
 
 

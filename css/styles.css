@@ -89,13 +89,13 @@ body {
 
 .playlist > h1 {
     text-align:         center;
-    border-bottom:      solid 1px darkgray;
     padding-bottom:     20px;
 }
 
 .playlist .song {
     padding:            20px;
     border-bottom:      solid 1px darkgray;
+    border-top:         solid 1px darkgray;
 }
 
 .playlist .title {
@@ -109,7 +109,7 @@ body {
 }
 
 #playlist .playing {
-    background-color:   #E6E6E6;
+    background-color: #a4dde6;
 }
 
 .hidden {

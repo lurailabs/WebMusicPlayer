@@ -7,7 +7,11 @@ var Playlist = function() {
     var addSong = function(song) {
         songs.push(song);
         addToPlaylistWidget(song);
-        if (songs.length === 1) currentSongIndex = 0;
+        if (songs.length === 1) {
+            setCurrentSongIndex(0);
+            $audio.src = song.getBlobUrl();
+            $audio.play();
+        }
     };
     
     var getCurrentSong = function() {
@@ -16,16 +20,24 @@ var Playlist = function() {
 
     var goBack = function() {
         if (currentSongIndex === 0) return;
-        currentSongIndex -= 1;
+        setCurrentSongIndex(currentSongIndex - 1);
         return songs[currentSongIndex];
     };
 
     var goForward = function() {
         if (currentSongIndex === songs.length-1) return;
-        currentSongIndex += 1;
+        setCurrentSongIndex(currentSongIndex + 1);
         return songs[currentSongIndex];
     };
-    
+
+    var setCurrentSongIndex = function(index) {
+        currentSongIndex = index;
+        // change background color
+        var $currentSong  = $playlist.getElementsByClassName('song')[index];
+        var $previousSong = $playlist.getElementsByClassName('playing')[0];
+        if($previousSong) $previousSong.classList.remove('playing');
+        $currentSong.classList.add('playing')
+    };
     
     
     /**   PLAYLIST WIDGET   **/
