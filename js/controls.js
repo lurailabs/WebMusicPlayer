@@ -29,9 +29,11 @@ controls.playBtn.addEventListener('click',      function() {
 } );
 
 controls.pauseBtn.addEventListener('click',     function() {
-    $audio.pause();
-    controls.playBtn.classList.remove('hidden');
-    controls.pauseBtn.classList.add('hidden');
+    if ($audio.src) {
+        $audio.pause();
+        controls.playBtn.classList.remove('hidden');
+        controls.pauseBtn.classList.add('hidden');
+    }
 } );
 
 controls.backBtn.addEventListener('click',      function() {

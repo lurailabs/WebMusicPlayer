@@ -15,6 +15,8 @@ body {
     overflow:           hidden;
 }
 
+/*  CONTROLS */
+
 #controls {
     background-color:   #E6E6E6;
     height:             80px;
@@ -28,7 +30,6 @@ body {
 .playerBtn {
     flex-basis:         50px;
 }
-
 
 .slider {
     min-width:          93%;
@@ -83,6 +84,7 @@ body {
 }
 
 .playlist .song {
+    position: relative;
     padding:            20px;
     border-bottom:      solid 1px darkgray;
     border-top:         solid 1px darkgray;
@@ -100,6 +102,14 @@ body {
 
 #playlist .playing {
     background-color: #a4dde6;
+}
+
+#playlist .remove-song {
+    position:           absolute;
+    font-size:          22px;
+    top:                10px;
+    right:              10px;
+    color:              #797979;
 }
 
 .hidden {

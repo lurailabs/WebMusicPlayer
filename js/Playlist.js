@@ -31,19 +31,40 @@ var Playlist = function() {
     };
 
     var setCurrentSongIndex = function(index) {
-        currentSongIndex = index;
-        changeSongBgcolor(index);
+        if (index < 0 || index > songs.length-1) {
+            currentSongIndex = null;
+        } else {
+            currentSongIndex = index;
+            changeSongBgcolor(index);
+        }
     };
+
+    var removeSong = function(index) {
+        if (index === currentSongIndex) {
+            var newSong = (currentSongIndex < songs.length-1) ? goForward() : goBack();
+            if (newSong) {
+                $audio.src = newSong.getBlobUrl();
+                $audio.play();
+            }
+        }
+        songs.splice(index, 1);
+        redrawWidget();
+        if (index <= currentSongIndex) setCurrentSongIndex(currentSongIndex-1);
+        if (currentSongIndex !== null) {
+            changeSongBgcolor(currentSongIndex);
+        } else {
+            $audio.pause();
+            $audio.src = null;
+            $audio.removeAttribute('src');
+        }
+    };
+
     
     
     /**   PLAYLIST WIDGET   **/
     
     var addToPlaylistWidget = function(song) {
-        $playlist.innerHTML +=
-            '<div class="song">' +
-            '<p class="title">'  + song.getFileName()  + '</p>' +
-            '<p class="artist">' + '---' + '</p>' +
-            '</div>';
+        $playlist.innerHTML += song.getSnippet();
     };
 
     var changeSongBgcolor = function(index) {
@@ -53,16 +74,14 @@ var Playlist = function() {
         $currentSong.classList.add('playing');
     };
 
-    var redrawPlaylistWidget = function() {
+    var redrawWidget = function() {
         $playlist.innerHTML = '';
-        for (var i=0, j=songs.length; i<j; i++) {
-            $playlist.innerHTML += 
-                '<div class="song">' +
-                    '<p class="title">'  + songs[i].getFileName()  + '</p>' +
-                    '<p class="artist">' + '---' + '</p>' +
-                '</div>';
+        for (var i=0; i<songs.length; i++) {
+            $playlist.innerHTML += songs[i].getSnippet();
         }
     };
+
+
 
     var togglePlaylist = function() {
         $playlist.classList.contains('hidden') ?
@@ -74,11 +93,18 @@ var Playlist = function() {
         var $song = e.target.closest('.song');  // closest is experimental. Not working on IE
         if ($song) {
             var index = Array.prototype.indexOf.call($playlist.children, $song);
-            setCurrentSongIndex(index - 1);
-            $audio.src = songs[currentSongIndex].getBlobUrl();
-            $audio.play();
+            if (e.target.classList.contains('remove-song')) {
+                removeSong(index);
+            } else {
+                setCurrentSongIndex(index);
+                $audio.src = songs[currentSongIndex].getBlobUrl();
+                $audio.play();
+            }
         }
     });
+
+
+    
 
 
     return {
