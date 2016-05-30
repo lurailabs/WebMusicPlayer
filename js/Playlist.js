@@ -82,7 +82,6 @@ var Playlist = function() {
     };
 
 
-
     var togglePlaylist = function() {
         $playlist.classList.contains('hidden') ?
             $playlist.classList.remove('hidden') :
