@@ -1,4 +1,5 @@
 var playlist        = new Playlist();
+var animation       = null;
 
 var $dropHere 	    = document.getElementById('dropHereMsg');
 var $audio          = document.getElementById('audio');

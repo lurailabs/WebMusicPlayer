@@ -11,6 +11,10 @@ var Playlist = function() {
             setCurrentSongIndex(0);
             $audio.src = song.getBlobUrl();
             $audio.play();
+            if (!animation) {
+                animation = new Animation();
+                animation.start();
+            }
         }
     };
     
