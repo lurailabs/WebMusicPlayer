@@ -12,7 +12,7 @@ var Animation = function() {
     var bufferLength 	= null;
     var dataArray 		= null; // where analyser data is copied
 
-    var connectContext = function() {
+    var connectAnalyser = function() {
         var source 	= context.createMediaElementSource($audio);
         analyser 	= context.createAnalyser();
         analyser.fftSize = 2048;
@@ -24,7 +24,6 @@ var Animation = function() {
     };
 
     var drawLine = function() {
-        window.requestAnimationFrame(drawLine);
 
         analyser.getByteTimeDomainData(dataArray);
 
@@ -43,21 +42,19 @@ var Animation = function() {
             var v = dataArray[i] / 128.0;
             var y = v * HEIGHT/2;
 
-            if(i === 0) {
-                canvasCtx.moveTo(x, y);
-            } else {
-                canvasCtx.lineTo(x, y);
-            }
+            (i === 0) ? canvasCtx.moveTo(x, y) :  canvasCtx.lineTo(x, y);
 
             x += sliceWidth;
         }
 
         canvasCtx.lineTo(WIDTH, HEIGHT/2);
         canvasCtx.stroke();
+
+        window.requestAnimationFrame(drawLine);
     };
 
     var start = function() {
-        connectContext();
+        connectAnalyser();
         drawLine();
     };
 
