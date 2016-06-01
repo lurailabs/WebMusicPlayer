@@ -16,8 +16,9 @@ function fileHandle(event) {
     for (var i=0; i<files.length; i++) {
         file = files[i];
         console.log('Name: ' + file.name);
+        console.log('Type: ' + file.type);
 
-        if (file.type !== 'audio/mp3') console.log('Not mp3');
+        if (file.type.indexOf('audio') < 0) console.log('Not music');
         else {
             var song = new Song(file);
             playlist.addSong(song);

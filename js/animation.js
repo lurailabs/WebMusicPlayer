@@ -7,7 +7,8 @@ var Animation = function() {
     var lineColor   = 'white';
     var bgColor     = '#473C3C';
 
-    var context 		= new AudioContext();
+    var constructor     = window.AudioContext || window.webkitAudioContext;
+    var context 		= new constructor();
     var analyser 		= null;
     var bufferLength 	= null;
     var timeArray 		= null;
