@@ -10,22 +10,55 @@ var Animation = function() {
     var context 		= new AudioContext();
     var analyser 		= null;
     var bufferLength 	= null;
-    var dataArray 		= null; // where analyser data is copied
+    var timeArray 		= null;
+    var freqArray       = null;
+
+    var animationNum = 0;
+
+    var animationType = [
+        function() {        // AnimationNum 0 : Frequency bars
+            analyser.fftSize = 32;
+            bufferLength 	= analyser.frequencyBinCount;
+            freqArray       = new Uint8Array(bufferLength);
+            drawBars();
+        },
+        function() {        // AnimationNum 1 : Oscilloscope style curve
+            analyser.fftSize = 1024;
+            bufferLength 	= analyser.frequencyBinCount;
+            timeArray 		= new Uint8Array(bufferLength);
+            drawCurve();
+        }
+    ];
 
     var connectAnalyser = function() {
         var source 	= context.createMediaElementSource($audio);
         analyser 	= context.createAnalyser();
-        analyser.fftSize = 2048;
-        bufferLength 	= analyser.frequencyBinCount;
-        dataArray 		= new Uint8Array(bufferLength);
-        analyser.getByteTimeDomainData(dataArray);
         source.connect(analyser);
         source.connect(context.destination);
     };
 
-    var drawLine = function() {
+    var drawBars = function() {
+        analyser.getByteFrequencyData(freqArray);
+        var barWidth = WIDTH / bufferLength;
+        var x = 0, y = 0;
+        canvasCtx.fillStyle = bgColor;
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-        analyser.getByteTimeDomainData(dataArray);
+        for (var i = 0; i < bufferLength; i++) {
+            canvasCtx.fillStyle = 'green';
+            y = HEIGHT - freqArray[i]*100 / 255;
+            canvasCtx.fillRect(x, y, barWidth, freqArray[i]*100 / 255);
+            x += barWidth;
+        }
+
+        window.requestAnimationFrame(drawBars);
+    };
+
+    var drawCurve = function() {
+
+        var x = 0, v = 0, y = 0;
+
+        analyser.getByteTimeDomainData(timeArray);
 
         canvasCtx.fillStyle = bgColor;
         canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -35,27 +68,30 @@ var Animation = function() {
 
         canvasCtx.beginPath();
 
-        var sliceWidth = WIDTH * 1.0 / bufferLength;
-        var x = 0;
-
         for(var i = 0; i < bufferLength; i++) {
-            var v = dataArray[i] / 128.0;
-            var y = v * HEIGHT/2;
+            v = timeArray[i] / 128.0;
+            y = v * HEIGHT/2;
 
             (i === 0) ? canvasCtx.moveTo(x, y) :  canvasCtx.lineTo(x, y);
 
-            x += sliceWidth;
+            x += WIDTH / bufferLength;
         }
 
         canvasCtx.lineTo(WIDTH, HEIGHT/2);
         canvasCtx.stroke();
 
-        window.requestAnimationFrame(drawLine);
+        window.requestAnimationFrame(drawCurve);
     };
+
+    canvas.addEventListener('click', function() {
+        animationNum = (animationNum >= animationType.length - 1) ? 0 : animationNum + 1;
+        animationType[animationNum]();
+    });
+
 
     var start = function() {
         connectAnalyser();
-        drawLine();
+        animationType[animationNum]();
     };
 
     return {
