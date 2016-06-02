@@ -90,14 +90,23 @@ body {
     border-top:         solid 1px darkgray;
 }
 
+.playlist .icon {
+    position: absolute;
+    width:              128px;
+    height:             128px;
+    background-image: url("../img/song-icon-128.png");
+}
+
 .playlist .title {
     font-weight:        bold;
     font-size:          larger;
+    margin-left:        140px;
 }
 
 #playlist .artist {
     font-size:          1rem;
     color:              #535353;
+    margin-left:        140px;
 }
 
 #playlist .playing {

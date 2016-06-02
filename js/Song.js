@@ -3,8 +3,9 @@ var Song = function(file) {
     var fileName    = file.name;
     var title;
     var artist;
-    var image;
+    var image       = '../img/song-icon-128.png';
     var snippet = '<div class="song">' +
+        '<div class="icon"></div>' +
         '<p class="title">'  + fileName  + '</p>' +
         '<p class="artist">' + '---' + '</p>' +
         '<span class="remove-song">x</span>' +
