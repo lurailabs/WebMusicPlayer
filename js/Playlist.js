@@ -12,7 +12,7 @@ var Playlist = function() {
             $audio.src = song.getBlobUrl();
             $audio.play();
             if (!animation) {
-                animation = new Animation();
+                animation = Animation();
                 animation.start();
             }
         }
@@ -106,9 +106,7 @@ var Playlist = function() {
         }
     });
 
-
     
-
 
     return {
         addSong:        addSong,

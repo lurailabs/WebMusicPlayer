@@ -1,28 +1,24 @@
-var playlist        = new Playlist();
-var animation       = null;
+var playlist  = Playlist();
+var animation = null;
 
-var $dropHere 	    = document.getElementById('dropHereMsg');
-var $audio          = document.getElementById('audio');
+var $dropHere   = document.getElementById('dropHereMsg');
+var $audio      = document.getElementById('audio');
 
 /**
- *	FILE DRAG & DROP EVENTS
+ *    FILE DRAG & DROP EVENTS
  **/
 
 function fileHandle(event) {
 
-    var files 	= event.dataTransfer.files;
-    var file 	= null;
+    var files = event.dataTransfer.files;
+    var file = null;
 
-    for (var i=0; i<files.length; i++) {
+    for (var i = 0; i < files.length; i++) {
         file = files[i];
-        console.log('Name: ' + file.name);
-        console.log('Type: ' + file.type);
+        console.log('Name: ' + file.name + '\nType: ' + file.type);
 
         if (file.type.indexOf('audio') < 0) console.log('Not music');
-        else {
-            var song = new Song(file);
-            playlist.addSong(song);
-        }
+        else playlist.addSong(new Song(file));
     }
 }
 
@@ -50,20 +46,20 @@ function dropHandle(event) {
 }
 
 
-window.addEventListener('dragover', 	dragOverHandle, 	false);
-window.addEventListener('dragleave',	dragLeaveHandle,	false);
-window.addEventListener('drop', 		dropHandle, 		false);
-window.addEventListener('drag', 	    preventDefault, 	false);
-window.addEventListener('dragend', 	    preventDefault, 	false);
-window.addEventListener('dragenter',    preventDefault, 	false);
-window.addEventListener('dragexit',     preventDefault, 	false);
-window.addEventListener('dragstart',    preventDefault, 	false);
+window.addEventListener('dragover', dragOverHandle, false);
+window.addEventListener('dragleave', dragLeaveHandle, false);
+window.addEventListener('drop', dropHandle, false);
+window.addEventListener('drag', preventDefault, false);
+window.addEventListener('dragend', preventDefault, false);
+window.addEventListener('dragenter', preventDefault, false);
+window.addEventListener('dragexit', preventDefault, false);
+window.addEventListener('dragstart', preventDefault, false);
 
 /**
- *	AUDIO TAG EVENTS
+ *    AUDIO TAG EVENTS
  **/
 
-$audio.onended = function() {
+$audio.onended = function () {
     var song = playlist.goForward();
     if (song) {
         $audio.src = song.getBlobUrl();
@@ -71,13 +67,12 @@ $audio.onended = function() {
     }
 };
 
-$audio.onplay = function() {
+$audio.onplay = function () {
     controls.playBtn.classList.add('hidden');
     controls.pauseBtn.classList.remove('hidden');
 };
 
-$audio.ontimeupdate = function() {
-      controls.positionSlider.value = ($audio.currentTime * controls.positionSlider.max) / $audio.duration;
+$audio.ontimeupdate = function () {
+    controls.positionSlider.value = ($audio.currentTime * controls.positionSlider.max) / $audio.duration;
 };
-
 
