@@ -26,23 +26,25 @@ function fileHandle(event) {
     }
 }
 
-function dragOverHandle(event) {
+function preventDefault(event) {
     event.stopPropagation();
     event.preventDefault();
+}
+
+function dragOverHandle(event) {
+    preventDefault(event);
     $dropHere.className = '';
     event.dataTransfer.dropEffect = 'copy';
 }
 
 
 function dragLeaveHandle(event) {
-    event.stopPropagation();
-    event.preventDefault();
+    preventDefault(event);
     $dropHere.className += 'hidden';
 }
 
 function dropHandle(event) {
-    event.stopPropagation();
-    event.preventDefault();
+    preventDefault(event);
     $dropHere.className += 'hidden';
     fileHandle(event);
 }
@@ -51,7 +53,11 @@ function dropHandle(event) {
 window.addEventListener('dragover', 	dragOverHandle, 	false);
 window.addEventListener('dragleave',	dragLeaveHandle,	false);
 window.addEventListener('drop', 		dropHandle, 		false);
-
+window.addEventListener('drag', 	    preventDefault, 	false);
+window.addEventListener('dragend', 	    preventDefault, 	false);
+window.addEventListener('dragenter',    preventDefault, 	false);
+window.addEventListener('dragexit',     preventDefault, 	false);
+window.addEventListener('dragstart',    preventDefault, 	false);
 
 /**
  *	AUDIO TAG EVENTS
