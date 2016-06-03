@@ -1,48 +1,20 @@
 var Song = function(file) {
-    var blobUrl     = URL.createObjectURL(file);
-    var fileName    = file.name;
-    var title;
-    var artist;
-    var image       = '../img/song-icon-128.png';
-    var snippet = '<div class="song">' +
-        '<div class="icon"></div>' +
-        '<p class="title">'  + fileName  + '</p>' +
-        '<p class="artist">' + '---' + '</p>' +
-        '<span class="remove-song">x</span>' +
-        '</div>';
+    this.file       = file;
+    this.blobUrl    = URL.createObjectURL(file);
+    this.title      = file.name;
+    this.artist     = '';
+    this.album      = '';
+    this.image      = '../img/song-icon-72.png';
+
+    getID3v1Tags(this);
     
-    var getBlobUrl = function() {
-        return blobUrl;
-    };
-    
-    var getFileName = function() {
-        return fileName;
+    this.getSnippet = function() {
+        return '<div class="song">' +
+            '<div class="icon"></div>' +
+            '<p class="title">'  + this.title  + '</p>' +
+            '<p class="artist">' + this.artist + '</p>' +
+            '<span class="remove-song">x</span>' +
+            '</div>';
     };
 
-    var getTitle = function() {
-        return title;
-    };
-    
-    var getArtist = function() {
-        return artist;
-    };
-
-    var getImage = function() {
-        return image;
-    };
-    
-    var getSnippet = function() {
-        return snippet;
-    };
-    
-    
-    
-    
-    return {
-        getBlobUrl:     getBlobUrl,
-        getFileName:    getFileName,
-        getArtist:      getArtist,
-        getImage:       getImage, 
-        getSnippet:     getSnippet
-    }
 };

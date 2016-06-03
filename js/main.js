@@ -62,7 +62,7 @@ window.addEventListener('dragstart', preventDefault, false);
 $audio.onended = function () {
     var song = playlist.goForward();
     if (song) {
-        $audio.src = song.getBlobUrl();
+        $audio.src = song.blobUrl;
         $audio.play();
     }
 };

@@ -9,7 +9,7 @@ var Playlist = function() {
         addToPlaylistWidget(song);
         if (songs.length === 1) {
             setCurrentSongIndex(0);
-            $audio.src = song.getBlobUrl();
+            $audio.src = song.blobUrl;
             $audio.play();
             if (!animation) {
                 animation = Animation();
@@ -47,7 +47,7 @@ var Playlist = function() {
         if (index === currentSongIndex) {
             var newSong = (currentSongIndex < songs.length-1) ? goForward() : goBack();
             if (newSong) {
-                $audio.src = newSong.getBlobUrl();
+                $audio.src = newSong.blobUrl;
                 $audio.play();
             }
         }
@@ -83,6 +83,7 @@ var Playlist = function() {
         for (var i=0; i<songs.length; i++) {
             $playlist.innerHTML += songs[i].getSnippet();
         }
+        changeSongBgcolor(currentSongIndex);
     };
 
 
@@ -100,11 +101,16 @@ var Playlist = function() {
                 removeSong(index);
             } else {
                 setCurrentSongIndex(index);
-                $audio.src = songs[currentSongIndex].getBlobUrl();
+                $audio.src = songs[currentSongIndex].blobUrl;
                 $audio.play();
             }
         }
     });
+    
+    /* ID3 tags decoder is async. It calls this function when tags are ready  */
+    var tagsReady = function() {
+        redrawWidget();
+    };
 
     
 
@@ -113,6 +119,7 @@ var Playlist = function() {
         getCurrentSong: getCurrentSong,
         goBack:         goBack,
         goForward:      goForward,
-        togglePlaylist: togglePlaylist
+        togglePlaylist: togglePlaylist,
+        tagsReady:      tagsReady
     };
 };

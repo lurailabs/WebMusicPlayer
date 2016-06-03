@@ -1,44 +1,48 @@
-var Id3v1 = {
+function getID3v1Tags(song) {
 
-    getDataView: function(file) {
+    var dataView = null;
+
+    var getDataView = function() {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
-            var data = event.target.result;
-            var dataView = new DataView(data, data.byteLength - 128, 128);
-            this.readInfo(dataView);
+            var buffer = event.target.result;
+            dataView = new DataView(buffer, buffer.byteLength - 128, 128);
+            readInfo();
         });
-        reader.readAsArrayBuffer(file);
-    },
-    hasId3v1Tags: function(dv) {
+        reader.readAsArrayBuffer(song.file);
+    };
+    
+    var hasId3v1Tags = function() {
         var tag = '';
         for (var i = 0; i < 3; i++) {
-            tag += String.fromCharCode(dv.getUint8(i));
+            tag += String.fromCharCode(dataView.getUint8(i));
         }
-        console.log('tag: ' + tag);
         return tag === 'TAG';
-    },
+    };
 
     // dv: dataView, start: first byte, end: last byte
-    decodeField: function(dv, start, end) {
+    var decodeField = function(start, end) {
         var str = '';
         for (var i = start; i < end + 1; i++) {
-            str += String.fromCharCode(dv.getUint8(i));
+            str += String.fromCharCode(dataView.getUint8(i));
         }
-    },
+        return str;
+    };
 
-    readInfo: function(dv) {
-        if (!this.hasId3v1Tags()) return null;
-        return {
-            title:  this.decodeField(dv, 3, 30),
-            artist: this.decodeField(dv, 31, 60),
-            album:  this.decodeField(dv, 61, 90),
-            year:   this.decodeField(dv, 91, 94),
-            track:  this.decodeField(dv, 126, 126),
-            genre:  this.decodeField(dv, 127, 127)
-        }
-    },
+    var readInfo = function() {
+        if (!hasId3v1Tags()) return;
+        song.title  =  decodeField(3, 30);
+        song.artist = decodeField(31, 60);
+        song.album  =  decodeField(61, 90);
+
+        // var year  =   decodeField(dv, 91, 94);
+        // var track =  decodeField(dv, 126, 126);
+        // var genre =  decodeField(dv, 127, 127);
+        // console.log('Title: ' + song.title + '\nArtist: ' + song.artist + '\nAlbum: ' + song.album);
+
+        // As this is async, playlist has to be alerted when tags are ready, so it can redraw itself
+        playlist.tagsReady();
+    };
     
-    get: function(file) {
-        this.getDataView(file);
-    }
-};
+    return getDataView();
+}
