@@ -1,3 +1,9 @@
+html {
+    font-family:                sans-serif; /* 1 */
+    -ms-text-size-adjust:       100%;       /* 2 */
+    -webkit-text-size-adjust:   100%;       /* 2 */
+}
+
 body {
     background-color:   #473C3C;
     margin:             0;
@@ -8,7 +14,7 @@ body {
 #player {
     border-top:         solid 1px red;
     position:           absolute;
-    top:                100px;
+    top:                90px;
     bottom:             0;
     right:              0;
     left:               0;
@@ -19,21 +25,28 @@ body {
 
 #controls {
     background-color:   #E6E6E6;
-    height:             80px;
+    height:             70px;
     padding-top:        20px;
+    display:            flex;
+    flex-direction:     column;
+}
+
+.row-1, .row-2 {
     display:            flex;
     flex-wrap:          wrap;
     align-items:        center;         /* vertical align */
     justify-content:    space-around;   /* horizontal align */
 }
 
+#positionSlider {
+    margin-top: 15px;
+    width:              93%;
+}
+
 .playerBtn {
     flex-basis:         50px;
 }
 
-.slider {
-    min-width:          93%;
-}
 
 .playerBtn:hover {
     color:              #9C1212;
@@ -46,7 +59,7 @@ body {
 }
 
 .playerBtn:hover .btnInfo {
-    display: block;
+    display:            block;
 }
 
 
@@ -130,4 +143,11 @@ body {
 canvas {
     width:              100%;
     height:             100%;
+}
+
+.browserupgrade {
+    margin:         0.2em 0;
+    background:     #ccc;
+    color:          #000;
+    padding:        0.2em 0;
 }

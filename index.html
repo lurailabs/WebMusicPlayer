@@ -1,43 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title>Web Music Player</title>
+    <meta name="description" content="Web based music player. Drag and drop your music files and enjoy.
+    Nothing is uploaded to the server.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<meta charset="utf-8">
 </head>
 
 <body>
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser.
+        Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+    </p>
+    <![endif]-->
 
 	<div id="controls">
-		<div id="backBtn" class="playerBtn">
-			<i class="fa fa-fast-backward"></i>
+        <div class="row-1">
+            <div id="backBtn" class="playerBtn">
+            <i class="fa fa-fast-backward"></i>
             <span class="btnInfo">previous song</span>
-		</div>
-		<div id="playBtn" class="playerBtn">
-			<i class="fa fa-play"></i>
-            <span class="btnInfo">play</span>
-		</div>
-		<div id="pauseBtn" class="playerBtn hidden">
-			<i class="fa fa-pause"></i>
-            <span class="btnInfo">pause</span>
-		</div>
-		<div id="forwardBtn" class="playerBtn">
-			<i class="fa fa-fast-forward"></i>
-            <span class="btnInfo">next song</span>
-		</div>
-
-        <div class="playerBtn">
-            <input id="volumeBtn" title="volume" type="range" min="0" max="100" value="100">
-            <span class="btnInfo">volume</span>
         </div>
+            <div id="playBtn" class="playerBtn">
+                <i class="fa fa-play"></i>
+                <span class="btnInfo">play</span>
+            </div>
+            <div id="pauseBtn" class="playerBtn hidden">
+                <i class="fa fa-pause"></i>
+                <span class="btnInfo">pause</span>
+            </div>
+            <div id="forwardBtn" class="playerBtn">
+                <i class="fa fa-fast-forward"></i>
+                <span class="btnInfo">next song</span>
+            </div>
 
-        <div id="showPlaylistBtn" class="playerBtn">
-            PLAYLIST
-            <span class="btnInfo">toggle playlist</span>
+            <div class="playerBtn">
+                <input id="volumeBtn" title="volume" type="range" min="0" max="100" value="100">
+                <span class="btnInfo">volume</span>
+            </div>
+
+            <div id="showPlaylistBtn" class="playerBtn">
+                PLAYLIST
+                <span class="btnInfo">toggle playlist</span>
+            </div>
+        </div> <!-- /row-1 -->
+
+		<div class="row-2">
+            <input id="positionSlider" class="slider" title="position" type="range" min="0" max="500" value="0">
         </div>
-
-		<input id="positionSlider" class="slider" title="position" type="range" min="0" max="500" value="0">
 
 	</div> <!-- /controls -->
 

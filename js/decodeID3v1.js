@@ -44,5 +44,5 @@ function getID3v1Tags(song) {
         playlist.tagsReady();
     };
     
-    return getDataView();
+    getDataView();
 }

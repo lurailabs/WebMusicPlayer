@@ -45,15 +45,14 @@ function dropHandle(event) {
     fileHandle(event);
 }
 
+window.addEventListener('dragstart',    preventDefault, false);
+window.addEventListener('drag',         preventDefault, false);
+window.addEventListener('dragenter',    preventDefault, false);
+window.addEventListener('dragleave',    dragLeaveHandle, false);
+window.addEventListener('dragover',     dragOverHandle, false);
+window.addEventListener('drop',         dropHandle, false);
+window.addEventListener('dragend',      preventDefault, false);
 
-window.addEventListener('dragover', dragOverHandle, false);
-window.addEventListener('dragleave', dragLeaveHandle, false);
-window.addEventListener('drop', dropHandle, false);
-window.addEventListener('drag', preventDefault, false);
-window.addEventListener('dragend', preventDefault, false);
-window.addEventListener('dragenter', preventDefault, false);
-window.addEventListener('dragexit', preventDefault, false);
-window.addEventListener('dragstart', preventDefault, false);
 
 /**
  *    AUDIO TAG EVENTS
