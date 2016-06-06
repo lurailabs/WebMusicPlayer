@@ -44,21 +44,12 @@ var Playlist = function() {
     };
 
     var removeSong = function(index) {
-        if (index > currentSongIndex) {
-            songs.splice(index, 1);
-            redrawWidget();
-            return;
-        }
-        
+        songs.splice(index, 1);
+
         if (index < currentSongIndex) {
-            songs.splice(index, 1);
             setCurrentSongIndex(currentSongIndex-1);
-            redrawWidget();
-            return;
-        }
-        
-        if (index === currentSongIndex) {
-            songs.splice(index, 1);
+
+        } else if (index === currentSongIndex) {
             var newSong = (currentSongIndex < songs.length-1) ? goForward() : goBack();
             if (newSong) {
                 $audio.src = newSong.blobUrl;
@@ -68,8 +59,9 @@ var Playlist = function() {
                 $audio.src = null;
                 $audio.removeAttribute('src');
             }
-            redrawWidget();
         }
+        
+        redrawWidget();
     };
 
     
