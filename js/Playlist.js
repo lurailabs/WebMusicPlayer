@@ -44,22 +44,31 @@ var Playlist = function() {
     };
 
     var removeSong = function(index) {
+        if (index > currentSongIndex) {
+            songs.splice(index, 1);
+            redrawWidget();
+            return;
+        }
+        
+        if (index < currentSongIndex) {
+            songs.splice(index, 1);
+            setCurrentSongIndex(currentSongIndex-1);
+            redrawWidget();
+            return;
+        }
+        
         if (index === currentSongIndex) {
+            songs.splice(index, 1);
             var newSong = (currentSongIndex < songs.length-1) ? goForward() : goBack();
             if (newSong) {
                 $audio.src = newSong.blobUrl;
                 $audio.play();
+            } else {
+                $audio.pause();
+                $audio.src = null;
+                $audio.removeAttribute('src');
             }
-        }
-        songs.splice(index, 1);
-        redrawWidget();
-        if (index <= currentSongIndex) setCurrentSongIndex(currentSongIndex-1);
-        if (currentSongIndex !== null) {
-            changeSongBgcolor(currentSongIndex);
-        } else {
-            $audio.pause();
-            $audio.src = null;
-            $audio.removeAttribute('src');
+            redrawWidget();
         }
     };
 
@@ -74,8 +83,8 @@ var Playlist = function() {
     var changeSongBgcolor = function(index) {
         var $currentSong  = $playlist.getElementsByClassName('song')[index];
         var $previousSong = $playlist.getElementsByClassName('playing')[0];
-        if($previousSong) $previousSong.classList.remove('playing');
-        $currentSong.classList.add('playing');
+        if ($previousSong) $previousSong.classList.remove('playing');
+        if ($currentSong) $currentSong.classList.add('playing');
     };
 
     var redrawWidget = function() {
