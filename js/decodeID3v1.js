@@ -17,6 +17,7 @@ function getID3v1Tags(song) {
         for (var i = 0; i < 3; i++) {
             tag += String.fromCharCode(dataView.getUint8(i));
         }
+        console.log('Has ID3 Tags v.1? ' + (tag === 'TAG'));
         return tag === 'TAG';
     };
 
@@ -30,7 +31,7 @@ function getID3v1Tags(song) {
     };
 
     var readInfo = function() {
-        if (!hasId3v1Tags()) return;
+        if (!hasId3v1Tags()) return -1;
         song.title  =  decodeField(3, 30);
         song.artist = decodeField(31, 60);
         song.album  =  decodeField(61, 90);

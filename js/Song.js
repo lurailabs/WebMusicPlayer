@@ -7,6 +7,7 @@ var Song = function(file) {
     this.image      = '../img/song-icon-72.png';
 
     getID3v1Tags(this);
+    getID3v2Tags(this);
     
     this.getSnippet = function() {
         return '<div class="song">' +
