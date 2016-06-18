@@ -1,21 +1,24 @@
 function getID3v2Tags(song) {
 
-    var dataView        = null;
+    var id3v2      = {
+        header: {}
+    };
+
+    /*
     var titleTag        = 'TIT2';
     var albumTag        = 'TALB';
     var performerTag    = 'TPE1';
     var bandTag         = 'TPE2';
     var pictureTag      = 'APIC';
+    */
 
     var getDataView = function() {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
             var buffer = event.target.result;
-            dataView = new DataView(buffer, 0, buffer.byteLength);
-            if ( hasId3v2Tags() ) {
-                //recorrer(dataView);
-                console.log('dataView size: ' + dataView.byteLength);
-                readHeader(new DataView(buffer, 0, 10) );
+            readHeader( new DataView(buffer, 0, 10) );
+            if (id3v2.header.id3 === 'ID3') {
+                readBody( new DataView(buffer, 10, id3v2.header.size));
             }
         });
         reader.readAsArrayBuffer(song.file);
@@ -26,73 +29,169 @@ function getID3v2Tags(song) {
         for (var i = 0; i < 3; i++) {
             id3 += String.fromCharCode(dataView.getUint8(i));
         }
-        console.log('Has ID3 Tags v.2? ' + (id3 === 'ID3'));
         return id3 === 'ID3';
     };
 
 
     var readHeader = function(dv) {
 
-        var id3 = '', version = '', flags = '', size = 0;
-        var i;
-
-        for (i = 0; i < 3; i++) {
-            id3 += String.fromCharCode(dataView.getUint8(i));
-        }
-        console.log('ID3: ' + id3);
-
-        version = dataView.getUint8(3) + '.' + dataView.getUint8(4);
-        console.log('VERSION: ' + version);
-
-        flags = dataView.getUint8(5).toString(2);
-        console.log('FLAGS: ' + flags);
-
-        size = (dataView.getUint8(6) << 21) | (dataView.getUint8(7) << 14) |
-            (dataView.getUint8(8) << 7) | (dataView.getUint8(9));
-        console.log('SIZE: ' + size);
-
-        var startingByte = 10;
-        var frameSize = 0;
-        while (startingByte < size + 10) {
-            getFrameId(startingByte);
-            frameSize = getSize(startingByte + 4);
-            startingByte += frameSize + 10;
-        }
+        id3v2.header = {
+            'id3': String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2)),
+            'version': [dv.getUint8(3), dv.getUint8(4)],
+            'flags': (function () {
+                var str = '0000000' + dv.getUint8(5).toString(2);
+                return str.substring(str.length - 8);
+            })(),
+            'size': getSize(dv, 6)
+        };
     };
 
-    var getFrameId = function(firstByte) {
+    var readBody = function(dv) {
+
+        var position = 0, frameId = '', frameSize = 0, data = '';
+
+        do {
+            frameId = getFrameId(dv, position);
+            // if not valid frame Id
+            if (!/^[A-Z]{3}([A-Z]|[1-4])$/.test(frameId)) break;
+
+            frameSize = getSize(dv, position + 4);
+
+            if (frameId[0] === 'T' && frameId !== 'TXXX') {
+                data = getTextFrameData(new DataView(dv.buffer, position + 20, frameSize));
+
+            } else if (frameId === 'APIC') {
+                data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize));
+            }
+            position += 10 + frameSize;
+            id3v2[frameId] = data;
+        } while(position < dv.byteLength);
+
+        console.log(id3v2);
+    };
+
+
+
+    var getFrameId = function(dv, position) {
+
         var frameId = '';
-        for (var i = firstByte; i < firstByte + 4; i++) {
-            frameId += String.fromCharCode(dataView.getUint8(i));
+        for (var i = position; i < position + 4; i++) {
+            frameId += String.fromCharCode(dv.getUint8(i));
         }
-        console.log('Frame id: ' + frameId);
-    };
-
-    var getSize = function(firstByte) {
-
-        var size = (dataView.getUint8(firstByte) << 21) | (dataView.getUint8(firstByte + 1) << 14) |
-            (dataView.getUint8(firstByte + 2) << 7) | dataView.getUint8(firstByte + 3);
-
-        console.log('FRAME SIZE: ' + size);
-        return size;
+        return frameId;
     };
 
 
 
+    var getSize = function(dv, position) {
+
+        return (dv.getUint8(position) << 21) | (dv.getUint8(position + 1) << 14) |
+            (dv.getUint8(position + 2) << 7) | dv.getUint8(position + 3);
+    };
 
 
-    function recorrer(dv) {
-        console.log('Version: ' + dv.getUint8(3) + ' ' + dv.getUint8(4) );
-        console.log('Flags: ' + dv.getUint8(5).toString(2) );
-        var size = 4 * (dv.getUint8(6) + dv.getUint8(7) +
-            dv.getUint8(8) + dv.getUint8(9));
-        console.log('Size: ' + size);
+    var getTextFrameData = function(dv) {
 
-        for (var i = 10; i < 300; i++) {
-            console.log( 'Byte ' + i + ': ' + String.fromCharCode(dv.getUint8(i)) );
+        var encoding    = getTextEncoding(dv.getUint8(0));
+        var text        = '';
+        var bom1        = dv.getUint8(1);
+        var bom2         = dv.getUint8(2);
+        var i = (bom1 === 255 && bom2 === 254) || (bom1 === 254 && bom1 === 255) ? 3 : 1;
+
+        for (i; i < dv.byteLength; i++ ) {
+            text += String.fromCharCode( dv.getUint8(i) );
         }
+
+        return {
+            encoding: encoding,
+            data: text
+        };
+    };
+
+
+    var getPicFrameData = function(dv) {
+
+        var pictureTypes = [
+            'Other',
+            '32x32 pixels "file icon" (PNG only)',
+            'Other file icon',
+            'Cover (front)',
+            'Cover (back)',
+            'Leaflet page',
+            'Media (e.g. label side of CD)',
+            'Lead artist/lead performer/soloist',
+            'Artist/performer',
+            'Conductor',
+            'Band/Orchestra',
+            'Composer',
+            'Lyricist/text writer',
+            'Recording Location',
+            'During recording',
+            'During performance',
+            'Movie/video screen capture',
+            'A bright coloured fish',
+            'Illustration',
+            'Band/artist logotype',
+            'Publisher/Studio logotype'
+        ];
+        var mimeType    = '', description = '', data = '';
+        var encoding    = getTextEncoding(dv.getUint8(0));
+        var position = 1;
+        while (dv.getUint8(position) !== 0x00) {
+            mimeType += String.fromCharCode( dv.getUint8(position) );
+            position++;
+        }
+        position += 1;  // $00 after MIME type
+        var picType = pictureTypes[dv.getUint8(position)];
+        position += 1;
+        while (dv.getUint8(position) !== 0x00) {
+            description += String.fromCharCode( dv.getUint8(position) );
+            position++;
+        }
+        position += 1;  // $00 after description
+
+        while(position < dv.byteLength) {
+            data += String.fromCharCode( dv.getUint8(position) & 0xFF);
+            position++;
+        }
+
+        var base64 = 'data:' + mimeType + ';base64,' + window.btoa(data);
+
+        document.getElementById('cover-image').setAttribute('src', base64);
+
+        return {
+            encoding: encoding,
+            mimeType: mimeType,
+            pictureType: picType,
+            description: description,
+            base64_data: base64
+        };
+    };
+
+
+    function getTextEncoding(code) {
+        var charset;
+        switch(code) {
+            case 0x00:
+                charset = 'iso-8859-1';
+                break;
+
+            case 0x01:
+                charset = 'utf-16';
+                break;
+
+            case 0x02:
+                charset = 'utf-16be';
+                break;
+
+            case 0x03:
+                charset = 'utf-8';
+                break;
+        }
+
+        return charset;
     }
-    
+
 
     getDataView();
 }
