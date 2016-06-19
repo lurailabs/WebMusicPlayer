@@ -4,21 +4,13 @@ function getID3v2Tags(song) {
         header: {}
     };
 
-    /*
-    var titleTag        = 'TIT2';
-    var albumTag        = 'TALB';
-    var performerTag    = 'TPE1';
-    var bandTag         = 'TPE2';
-    var pictureTag      = 'APIC';
-    */
-
     var getDataView = function() {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
             var buffer = event.target.result;
             readHeader( new DataView(buffer, 0, 10) );
             if (id3v2.header.id3 === 'ID3') {
-                readBody( new DataView(buffer, 10, id3v2.header.size));
+                readBody( new DataView(buffer, 10, id3v2.header.size) );
             }
         });
         reader.readAsArrayBuffer(song.file);
@@ -36,13 +28,10 @@ function getID3v2Tags(song) {
     var readHeader = function(dv) {
 
         id3v2.header = {
-            'id3': String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2)),
-            'version': [dv.getUint8(3), dv.getUint8(4)],
-            'flags': (function () {
-                var str = '0000000' + dv.getUint8(5).toString(2);
-                return str.substring(str.length - 8);
-            })(),
-            'size': getSize(dv, 6)
+            'id3':      String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2)),
+            'version':  [dv.getUint8(3), dv.getUint8(4)],
+            'flags':    Decoder.getBitsFromByte(dv.getUint8(5)),
+            'size':     getSize(dv, 6)
         };
     };
 
@@ -52,19 +41,28 @@ function getID3v2Tags(song) {
 
         do {
             frameId = getFrameId(dv, position);
-            // if not valid frame Id
-            if (!/^[A-Z]{3}([A-Z]|[1-4])$/.test(frameId)) break;
+            // check if frameId is valid
+            if (!/^[A-Z]{3}([A-Z]|[1-4])$/.test(frameId)) {
+                console.log('Test false: ' + frameId);
+                position++;
+                break;
+                continue;
+            }
 
             frameSize = getSize(dv, position + 4);
 
-            if (frameId[0] === 'T' && frameId !== 'TXXX') {
-                data = getTextFrameData(new DataView(dv.buffer, position + 20, frameSize));
+            console.log('Frame ID: ' + frameId + ' - Frame size: ' + frameSize);
 
-            } else if (frameId === 'APIC') {
+            if (frameId === 'APIC') {
                 data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize));
+            } else {
+                data = getTextFrameData(new DataView(dv.buffer, position + 20, frameSize));
             }
+
             position += 10 + frameSize;
             id3v2[frameId] = data;
+            id3v2[frameId].size = frameSize;
+
         } while(position < dv.byteLength);
 
         console.log(id3v2);
@@ -93,18 +91,16 @@ function getID3v2Tags(song) {
     var getTextFrameData = function(dv) {
 
         var encoding    = getTextEncoding(dv.getUint8(0));
-        var text        = '';
-        var bom1        = dv.getUint8(1);
-        var bom2         = dv.getUint8(2);
-        var i = (bom1 === 255 && bom2 === 254) || (bom1 === 254 && bom1 === 255) ? 3 : 1;
+        var codes       = [];
 
-        for (i; i < dv.byteLength; i++ ) {
-            text += String.fromCharCode( dv.getUint8(i) );
+        for (var i = 1; i < dv.byteLength; i++ ) {
+            codes.push(dv.getUint8(i).toString(16));
         }
 
         return {
-            encoding: encoding,
-            data: text
+            encoding:   encoding,
+            codes:      codes,
+            data:       Decoder[encoding](dv, 1)
         };
     };
 
@@ -151,7 +147,7 @@ function getID3v2Tags(song) {
         position += 1;  // $00 after description
 
         while(position < dv.byteLength) {
-            data += String.fromCharCode( dv.getUint8(position) & 0xFF);
+            data += String.fromCharCode( dv.getUint8(position) );
             position++;
         }
 
@@ -160,11 +156,11 @@ function getID3v2Tags(song) {
         document.getElementById('cover-image').setAttribute('src', base64);
 
         return {
-            encoding: encoding,
-            mimeType: mimeType,
-            pictureType: picType,
-            description: description,
-            base64_data: base64
+            encoding:       encoding,
+            mimeType:       mimeType,
+            pictureType:    picType,
+            description:    description,
+            base64_data:    base64
         };
     };
 
@@ -177,11 +173,11 @@ function getID3v2Tags(song) {
                 break;
 
             case 0x01:
-                charset = 'utf-16';
+                charset = 'utf-16';  // big or little endian (if BOM not present: big endian)
                 break;
 
             case 0x02:
-                charset = 'utf-16be';
+                charset = 'utf-16be'; // big endian
                 break;
 
             case 0x03:
