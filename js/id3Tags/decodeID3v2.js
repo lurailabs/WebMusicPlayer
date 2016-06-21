@@ -169,8 +169,15 @@ function getID3v2Tags(song) {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
             var buffer = event.target.result;
+            console.log('original buffer size; ' + buffer.byteLength);
             readHeader( new DataView(buffer, 0, 10) );
             if (id3v2.header.id3 === 'ID3') {
+
+                // some files have tags with size bigger than file size
+                if (id3v2.header.bodySize > buffer.byteLength - 10) {
+                    id3v2.header.bodySize = buffer.byteLength -10;
+                }
+
                 readBody( new DataView(buffer, 10, id3v2.header.bodySize) );
             }
         });
@@ -192,7 +199,7 @@ function getID3v2Tags(song) {
             'id3':      String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2)),
             'version':  [dv.getUint8(3), dv.getUint8(4)],
             'flags':    Decoder.getBitsFromByte(dv.getUint8(5)),
-            'bodySize':     getSize(dv, 6)
+            'bodySize': dv.getUint32(6)
         };
     };
 
@@ -206,13 +213,17 @@ function getID3v2Tags(song) {
             if (frameIds.indexOf(frameId) === -1) {
                 position++;
                 if (position >= dv.byteLength - 10) {
-                    console.log('out of tags bounds');
+                    console.log('out of id3 tags bounds');
                     break;
                 }
                 else continue;
             }
 
-            frameSize = getSize(dv, position + 4);
+            frameSize = dv.getUint32(position + 4);
+            // Frame size corrected if number is wrong (too big)
+            if (frameSize > dv.buffer.byteLength - position - 20) {
+                frameSize = dv.buffer.byteLength - position - 20;
+            }
 
             frameFlags = [
                 Decoder.getBitsFromByte(dv.getUint8(position + 8)),
@@ -222,21 +233,18 @@ function getID3v2Tags(song) {
             console.log('Frame ID: ' + frameId + ' - Frame size: ' + frameSize);
 
             if (frameId === 'APIC') {
-                // TO-DO: find out why APIC frameSize is not correct. I'm manually adding lots of bytes
-                // to get the whole image
-                data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize + 30000), position + 20);
+                data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize));
             } else {
                 data = getTextFrameData(new DataView(dv.buffer, position + 20, frameSize));
             }
 
             position += 10 + frameSize;
 
-            if (id3v2.hasOwnProperty(frameId)) {
-                frameId += '-' + num;
-                num++;
-            }
-            id3v2[frameId] = data;
-            id3v2[frameId].size = frameSize;
+            // Adds num. to property name if several tags with same id (usually iTunes TXXX tags)
+            if (id3v2.hasOwnProperty(frameId))  frameId += '-' + num++;
+
+            id3v2[frameId]       = data;
+            id3v2[frameId].size  = frameSize;
             id3v2[frameId].flags = frameFlags;
 
         } while(position < dv.byteLength);
@@ -256,26 +264,11 @@ function getID3v2Tags(song) {
     };
 
 
-
-    var getSize = function(dv, position) {
-
-        return (dv.getUint8(position) << 21) | (dv.getUint8(position + 1) << 14) |
-            (dv.getUint8(position + 2) << 7) | dv.getUint8(position + 3);
-    };
-
-
     var getTextFrameData = function(dv) {
 
         var encoding    = getTextEncoding(dv.getUint8(0));
-        var codes       = [];
-
-        for (var i = 1; i < dv.byteLength; i++ ) {
-            codes.push(dv.getUint8(i).toString(16));
-        }
-
         return {
             encoding:   encoding,
-            codes:      codes,
             data:       Decoder[encoding](dv)
         };
     };
@@ -340,62 +333,7 @@ function getID3v2Tags(song) {
             base64_data:    base64
         };
     };
-
-    // Converts an ArrayBuffer directly to base64, without any intermediate 'convert to string then
-// use window.btoa' step. According to my tests, this appears to be a faster approach:
-// http://jsperf.com/encoding-xhr-image-data/5
-
-    function base64ArrayBuffer(bytes) {
-        var base64    = '';
-        var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-
-        //var bytes         = new Uint8Array(arrayBuffer)
-        var byteLength    = bytes.byteLength;
-        var byteRemainder = byteLength % 3;
-        var mainLength    = byteLength - byteRemainder;
-
-        var a, b, c, d;
-        var chunk;
-
-        // Main loop deals with bytes in chunks of 3
-        for (var i = 0; i < mainLength; i = i + 3) {
-            // Combine the three bytes into a single integer
-            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2]
-
-            // Use bitmasks to extract 6-bit segments from the triplet
-            a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
-            b = (chunk & 258048)   >> 12; // 258048   = (2^6 - 1) << 12
-            c = (chunk & 4032)     >>  6; // 4032     = (2^6 - 1) << 6
-            d = chunk & 63;               // 63       = 2^6 - 1
-
-            // Convert the raw binary segments to the appropriate ASCII encoding
-            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
-        }
-
-        // Deal with the remaining bytes and padding
-        if (byteRemainder == 1) {
-            chunk = bytes[mainLength];
-
-            a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
-
-            // Set the 4 least significant bits to zero
-            b = (chunk & 3)   << 4; // 3   = 2^2 - 1
-
-            base64 += encodings[a] + encodings[b] + '==';
-        } else if (byteRemainder == 2) {
-            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
-
-            a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
-            b = (chunk & 1008)  >>  4; // 1008  = (2^6 - 1) << 4
-
-            // Set the 2 least significant bits to zero
-            c = (chunk & 15)    <<  2; // 15    = 2^4 - 1
-
-            base64 += encodings[a] + encodings[b] + encodings[c] + '=';
-        }
-
-        return base64;
-    }
+    
 
 
     function tryImage(base64) {
