@@ -16,6 +16,7 @@ var Playlist = function() {
                 animation.start();
             }
         }
+        song.getId3tags();
     };
     
     var getCurrentSong = function() {

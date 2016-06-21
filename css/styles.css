@@ -109,7 +109,6 @@ body {
     position:           absolute;
     width:              72px;
     height:             72px;
-    background-image: url("../img/song-icon-72.png");
 }
 
 .playlist .title {

@@ -29,11 +29,10 @@ var Decoder = {
     },
 
     'utf-16be': function(dv) {
-        return this['utf-16'](dv, position);
+        return this['utf-16'](dv);
     },
 
     'utf-8': function(dv) {
-        console.log('dv size: ' + dv.byteLength);
         var str = '%', char = '', endian = null;
         if (dv.byteLength >= 3) endian = this.checkEndianness(dv.getUint8(1), dv.getUint8(2));
         var i = endian ? 3 : 1;

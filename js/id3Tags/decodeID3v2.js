@@ -1,4 +1,4 @@
-function getID3v2Tags(song, done) {
+function getID3v2Tags(dataView, done) {
 
     var id3v2      = {
         header: {}
@@ -166,35 +166,22 @@ function getID3v2Tags(song, done) {
     };
     */
 
+    var readTags = function() {
+        
+        readHeader(dataView);
+        if (id3v2.header.id3 === 'ID3') {
 
-    var getDataView = function() {
-        var reader = new FileReader();
-        reader.addEventListener('load', function(event) {
-            var buffer = event.target.result;
-            console.log('original buffer size: ' + buffer.byteLength);
-            readHeader( new DataView(buffer, 0, 10) );
-            if (id3v2.header.id3 === 'ID3') {
-
-                // some files have tags with size bigger than file size
-                if (id3v2.header.bodySize > buffer.byteLength - 10) {
-                    id3v2.header.bodySize = buffer.byteLength -10;
-                }
-
-                readBody( new DataView(buffer, 10, id3v2.header.bodySize) );
+            // some files have tags with size bigger than file size
+            if (id3v2.header.bodySize > dataView.buffer.byteLength - 10) {
+                id3v2.header.bodySize = dataView.buffer.byteLength -10;
             }
-        });
-        reader.readAsArrayBuffer(song.file);
-    };
-
-    var hasId3v2Tags = function() {
-        var id3 = '';
-        for (var i = 0; i < 3; i++) {
-            id3 += String.fromCharCode(dataView.getUint8(i));
+            readBody( new DataView(dataView.buffer, 10, id3v2.header.bodySize) );
+        } else {
+            done(null);
         }
-        return id3 === 'ID3';
     };
-
-
+    
+    
     var readHeader = function(dv) {
 
         id3v2.header = {
@@ -215,7 +202,7 @@ function getID3v2Tags(song, done) {
             if (frameIds.indexOf(frameId) === -1) {
                 position++;
                 if (position >= dv.byteLength - 10) {
-                    console.log('out of id3 tags bounds');
+                    //console.log('out of id3 tags bounds');
                     break;
                 }
                 else continue;
@@ -232,7 +219,7 @@ function getID3v2Tags(song, done) {
                 Decoder.getBitsFromByte(dv.getUint8(position + 9))
             ];
 
-            console.log('Frame ID: ' + frameId + ' - Frame size: ' + frameSize);
+            //console.log('Frame ID: ' + frameId + ' - Frame size: ' + frameSize);
 
             if (frameId === 'APIC') {
                 data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize));
@@ -324,8 +311,6 @@ function getID3v2Tags(song, done) {
 
         var base64 = 'data:' + mimeType + ';base64,' + window.btoa(data);
 
-        tryImage(base64);
-
         return {
             encoding:       encoding,
             mimeType:       mimeType,
@@ -336,7 +321,7 @@ function getID3v2Tags(song, done) {
     };
     
 
-
+    /*
     function tryImage(base64) {
 
         document.querySelector('canvas').setAttribute('hidden', 'true');
@@ -344,7 +329,7 @@ function getID3v2Tags(song, done) {
         img.src = base64;
         document.body.appendChild(img);
     }
-
+    */
 
     function getTextEncoding(code) {
         var charset;
@@ -373,5 +358,5 @@ function getID3v2Tags(song, done) {
     }
 
 
-    getDataView();
+    readTags();
 }
