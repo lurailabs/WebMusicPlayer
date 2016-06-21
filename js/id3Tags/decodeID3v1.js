@@ -1,6 +1,7 @@
-function getID3v1Tags(song) {
+function getID3v1Tags(song, done) {
 
     var dataView = null;
+    var id3v1 = {};
 
     var getDataView = function() {
         var reader = new FileReader();
@@ -13,10 +14,7 @@ function getID3v1Tags(song) {
     };
     
     var hasId3v1Tags = function() {
-        var tag = '';
-        for (var i = 0; i < 3; i++) {
-            tag += String.fromCharCode(dataView.getUint8(i));
-        }
+        var tag = decodeField(0, 3);
         console.log('Has ID3 Tags v.1? ' + (tag === 'TAG'));
         return tag === 'TAG';
     };
@@ -24,26 +22,29 @@ function getID3v1Tags(song) {
     // dv: dataView, start: first byte, end: last byte
     var decodeField = function(start, end) {
         var str = '';
-        for (var i = start; i < end + 1; i++) {
+        for (var i = start; i < end; i++) {
             str += String.fromCharCode(dataView.getUint8(i));
         }
         return str;
     };
 
     var readInfo = function() {
-        if (!hasId3v1Tags()) return -1;
-        song.title  =  decodeField(3, 30);
-        song.artist = decodeField(31, 60);
-        song.album  =  decodeField(61, 90);
-
-        // var year  =   decodeField(dv, 91, 94);
-        // var track =  decodeField(dv, 126, 126);
-        // var genre =  decodeField(dv, 127, 127);
-        // console.log('Title: ' + song.title + '\nArtist: ' + song.artist + '\nAlbum: ' + song.album);
+        
+        if (hasId3v1Tags()) {
+            id3v1.title     = decodeField(3, 33);
+            id3v1.artist    = decodeField(33, 63);
+            id3v1.album     = decodeField(63, 93);
+            id3v1.year      = decodeField(93, 97);
+            id3v1.comment   = decodeField(97, 127);
+            id3v1.genre     = dataView.getUint8(127);
+        }
 
         // As this is async, playlist has to be alerted when tags are ready, so it can redraw itself
-        playlist.tagsReady();
+        //playlist.tagsReady();
+
+        done(id3v1);
     };
     
     getDataView();
+
 }

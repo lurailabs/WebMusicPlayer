@@ -6,10 +6,17 @@ var Song = function(file) {
     this.album      = '';
     this.image      = '../img/song-icon-72.png';
 
-    
 
-    //getID3v1Tags(this);
-    getID3v2Tags(this);
+    getID3v1Tags(this, function(tags) {
+        console.log('ID3 v.1 TAGS: ');
+        console.log(tags);
+    });
+
+    getID3v2Tags(this, function(tags) {
+        console.log('ID3 v.2 TAGS: ');
+        console.log(tags);
+    });
+    
 
     this.getSnippet = function() {
         return '<div class="song">' +

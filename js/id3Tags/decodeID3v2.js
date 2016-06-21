@@ -1,4 +1,4 @@
-function getID3v2Tags(song) {
+function getID3v2Tags(song, done) {
 
     var id3v2      = {
         header: {}
@@ -158,18 +158,20 @@ function getID3v2Tags(song) {
         'WPUB',
         'WXXX' ];
 
-    window.onerror = function(message, file, line, col, error) {
+    /*
+    window.onerror = function(message, url, line, col, error) {
         console.log('Error ocurred: ' + error.message);
         console.log(id3v2);
         return false;
     };
+    */
 
 
     var getDataView = function() {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
             var buffer = event.target.result;
-            console.log('original buffer size; ' + buffer.byteLength);
+            console.log('original buffer size: ' + buffer.byteLength);
             readHeader( new DataView(buffer, 0, 10) );
             if (id3v2.header.id3 === 'ID3') {
 
@@ -248,8 +250,8 @@ function getID3v2Tags(song) {
             id3v2[frameId].flags = frameFlags;
 
         } while(position < dv.byteLength);
-
-        console.log(id3v2);
+        
+        done(id3v2);
     };
 
 
@@ -323,7 +325,6 @@ function getID3v2Tags(song) {
         var base64 = 'data:' + mimeType + ';base64,' + window.btoa(data);
 
         tryImage(base64);
-
 
         return {
             encoding:       encoding,
