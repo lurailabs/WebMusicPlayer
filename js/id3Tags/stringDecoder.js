@@ -5,7 +5,7 @@ var Decoder = {
         return str.substring(str.length - 8);
     },
 
-    'iso-8859-1': function(dv, position) {
+    'iso-8859-1': function(dv) {
         var str = '';
         for (var i = 1; i < dv.byteLength; i++) {
             str += String.fromCharCode(dv.getUint8(i));
@@ -13,7 +13,7 @@ var Decoder = {
         return str;
     },
 
-    'utf-16': function(dv, position) {
+    'utf-16': function(dv) {
         var str = '';
         var endian = this.checkEndianness(dv.getUint8(1), dv.getUint8(2));
         var i = endian ? 3 : 1;
@@ -28,19 +28,25 @@ var Decoder = {
         return str;
     },
 
-    'utf-16be': function(dv, position) {
+    'utf-16be': function(dv) {
         return this['utf-16'](dv, position);
     },
 
-    'utf-8': function(dv, position) {
-        var str = '%', char = '';
-        var endian = this.checkEndianness(dv.getUint8(1), dv.getUint8(2));
+    'utf-8': function(dv) {
+        console.log('dv size: ' + dv.byteLength);
+        var str = '%', char = '', endian = null;
+        if (dv.byteLength >= 3) endian = this.checkEndianness(dv.getUint8(1), dv.getUint8(2));
         var i = endian ? 3 : 1;
         for (i; i < dv.byteLength; i++) {
             char = dv.getUint8(i).toString(16);
             if (char != 0) str += dv.getUint8(i).toString(16) + '%';
         }
         return decodeURIComponent(str.slice(0, -1));
+    },
+
+    // encoding not correctly detected
+    'other' : function(dv) {
+        return this['iso-8859-1'](dv);
     },
 
     checkEndianness: function(bom1, bom2) {
