@@ -28,7 +28,7 @@ function getID3v1Tags(dataView, done) {
             id3v1.genre     = dataView.getUint8(127);
         }
         
-        done(id3v1);
+        done(id3v1, 'version 1');
     };
     
     readTags();

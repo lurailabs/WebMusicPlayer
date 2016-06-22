@@ -157,14 +157,12 @@ function getID3v2Tags(dataView, done) {
         'WPAY',
         'WPUB',
         'WXXX' ];
-
-    /*
-    window.onerror = function(message, url, line, col, error) {
+    
+    this.onerror = function(message, url, line, col, error) {
         console.log('Error ocurred: ' + error.message);
         console.log(id3v2);
         return false;
     };
-    */
 
     var readTags = function() {
         
@@ -208,22 +206,17 @@ function getID3v2Tags(dataView, done) {
                 else continue;
             }
 
-            frameSize = dv.getUint32(position + 4);
-            // Frame size corrected if number is wrong (too big)
-            if (frameSize > dv.buffer.byteLength - position - 20) {
-                frameSize = dv.buffer.byteLength - position - 20;
-            }
-
             frameFlags = [
                 Decoder.getBitsFromByte(dv.getUint8(position + 8)),
                 Decoder.getBitsFromByte(dv.getUint8(position + 9))
             ];
 
-            //console.log('Frame ID: ' + frameId + ' - Frame size: ' + frameSize);
 
             if (frameId === 'APIC') {
+                frameSize = dv.getUint32(position + 4);
                 data = getPicFrameData (new DataView(dv.buffer, position + 20, frameSize));
             } else {
+                frameSize = frameSize = getSize(dv, position + 4);
                 data = getTextFrameData(new DataView(dv.buffer, position + 20, frameSize));
             }
 
@@ -251,6 +244,12 @@ function getID3v2Tags(dataView, done) {
         }
         return frameId;
     };
+
+    var getSize = function(dv, position) {
+
+        return (dv.getUint8(position) << 21) | (dv.getUint8(position + 1) << 14) |
+            (dv.getUint8(position + 2) << 7) | dv.getUint8(position + 3);
+     };
 
 
     var getTextFrameData = function(dv) {
@@ -304,6 +303,7 @@ function getID3v2Tags(dataView, done) {
         }
         position += 1;  // $00 after description
 
+        
         while(position < dv.byteLength) {
             data += String.fromCharCode( dv.getUint8(position) );
             position++;
@@ -316,20 +316,10 @@ function getID3v2Tags(dataView, done) {
             mimeType:       mimeType,
             pictureType:    picType,
             description:    description,
+            //dataView:       new DataView(dv.buffer, position, dv.byteLength)
             base64_data:    base64
         };
     };
-    
-
-    /*
-    function tryImage(base64) {
-
-        document.querySelector('canvas').setAttribute('hidden', 'true');
-        var img = document.createElement('img');
-        img.src = base64;
-        document.body.appendChild(img);
-    }
-    */
 
     function getTextEncoding(code) {
         var charset;
