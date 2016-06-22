@@ -7,6 +7,12 @@ function getID3v2Tags(file, done) {
         header: {}
     };
 
+    window.addEventListener('error', function(msg) {
+        console.log(msg);
+        done(id3v2);
+        return true;
+    });
+
     var frameIds = [
         'BUF',
         'CNT',
