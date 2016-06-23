@@ -23,6 +23,7 @@ controls.volumeBtn.addEventListener('input',    function() {
 controls.playBtn.addEventListener('click',      function() {
     if ($audio.src) {
         $audio.play();
+        animation.start();
         controls.playBtn.classList.add('hidden');
         controls.pauseBtn.classList.remove('hidden');
     }
@@ -31,6 +32,7 @@ controls.playBtn.addEventListener('click',      function() {
 controls.pauseBtn.addEventListener('click',     function() {
     if ($audio.src) {
         $audio.pause();
+        animation.pause();
         controls.playBtn.classList.remove('hidden');
         controls.pauseBtn.classList.add('hidden');
     }

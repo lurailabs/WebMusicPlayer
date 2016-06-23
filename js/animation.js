@@ -1,4 +1,6 @@
 var Animation = function() {
+    
+    var pause       = false;
 
     var canvas		= document.querySelector('canvas');
     var canvasCtx   = canvas.getContext('2d');
@@ -52,7 +54,7 @@ var Animation = function() {
             x += barWidth;
         }
 
-        window.requestAnimationFrame(drawBars);
+        if (!pause) window.requestAnimationFrame(drawBars);
     };
 
     var drawCurve = function() {
@@ -81,7 +83,7 @@ var Animation = function() {
         canvasCtx.lineTo(WIDTH, HEIGHT/2);
         canvasCtx.stroke();
 
-        window.requestAnimationFrame(drawCurve);
+        if (!pause) window.requestAnimationFrame(drawCurve);
     };
 
     canvas.addEventListener('click', function() {
@@ -91,11 +93,18 @@ var Animation = function() {
 
 
     var start = function() {
-        connectAnalyser();
+        pause = false;
+        if (!analyser) connectAnalyser();
+        animationType[animationNum]();
+    };
+    
+    var pause = function() {
+        pause = true;
         animationType[animationNum]();
     };
 
     return {
-        start: start
+        start: start,
+        pause: pause
     };
 };
