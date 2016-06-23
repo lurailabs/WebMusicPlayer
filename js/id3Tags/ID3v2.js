@@ -178,6 +178,7 @@ function getID3v2Tags(file, done) {
         var data = file.slice(position, end);
         reader.addEventListener('load', function(event) {
             var result = event.target.result;
+            reader = null;
             //console.log('bytes read in read: ' + result.byteLength);
             done(result);
         });
@@ -278,7 +279,7 @@ function getID3v2Tags(file, done) {
                 id3v2[frameId].data = Decoder[encoding](dv);
                 console.log(id3v2[frameId].data);
                 position += size;
-                if (position >= id3v2.header.bodySize - 10) done(id3v2);
+                if (position >= id3v2.header.bodySize - position) done(id3v2);
                 else getFrameHeader();
             }
         );
@@ -287,7 +288,7 @@ function getID3v2Tags(file, done) {
 
     var getPicFrameData = function(frameId, size) {
         console.log('Fetching pic frame data...');
-        read(position + size,
+        read(position + 150, //position + size,
             'readAsArrayBuffer',
             function(buffer) {
                 var dv = new DataView(buffer);
@@ -332,27 +333,33 @@ function getID3v2Tags(file, done) {
                 }
                 dvPosition += 1;  // $00 after description
 
-
-                while(dvPosition < dv.byteLength) {
-                    data += String.fromCharCode( dv.getUint8(dvPosition) );
-                    dvPosition++;
-                }
-                var base64 = 'data:' + mimeType + ';base64,' + window.btoa(data);
-
                 id3v2[frameId].encoding     = encoding;
                 id3v2[frameId].mimeType     = mimeType;
                 id3v2[frameId].pictureType  = picType;
                 id3v2[frameId].description  = description;
-                id3v2[frameId].base64_data  = base64;
 
-                position += size;
-                if (position >= id3v2.header.bodySize - 10) done(id3v2);
-                else getFrameHeader();
+                position += dvPosition;
+                getImage(frameId, size, dvPosition);
+
             }
         );
 
     };
 
+
+    var getImage = function(frameId, frameSize, imgInfoSize) {
+
+        read(position + frameSize,
+            'readAsBinaryString',
+            function(str) {
+                id3v2[frameId].base64_data  =
+                    'data:' + id3v2[frameId].mimeType + ';base64,' + window.btoa(str);
+                position += frameSize - imgInfoSize;
+                if (position >= id3v2.header.bodySize - position) done(id3v2);
+                else getFrameHeader();
+            }
+        );
+    };
 
 
 
