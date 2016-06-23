@@ -42,6 +42,7 @@ var Playlist = function() {
         } else {
             currentSongIndex = index;
             changeSongBgcolor(index);
+            songs[currentSongIndex].showInfo();
         }
     };
 
@@ -110,9 +111,10 @@ var Playlist = function() {
         }
     });
     
-    /* ID3 tags decoder is async. It calls this function when tags are ready  */
+    /* ID3 tags decoder is async. Tis function is called when tags are ready  */
     var tagsReady = function() {
         redrawWidget();
+        songs[currentSongIndex].showInfo();
     };
 
     

@@ -18,6 +18,7 @@ controls.playlistBtn.addEventListener('click',  function() {
 
 controls.volumeBtn.addEventListener('input',    function() {
     if($audio.src) $audio.volume = this.value / this.max;
+    console.log('VOLUME: ' + $audio.volume);
 });
 
 controls.playBtn.addEventListener('click',      function() {

@@ -21,26 +21,26 @@ function fileHandle(event) {
     }
 }
 
-function preventDefault(event) {
+function defaultBehaviour(event) {
     event.stopPropagation();
     event.preventDefault();
 }
 
 function dragOverHandle(event) {
-    preventDefault(event);
+    defaultBehaviour(event);
     event.dataTransfer.dropEffect = 'copy';
 }
 
 function dropHandle(event) {
-    preventDefault(event);
+    defaultBehaviour(event);
     fileHandle(event);
 }
 
-window.addEventListener('dragstart',    preventDefault, false);
-window.addEventListener('drag',         preventDefault, false);
-window.addEventListener('dragenter',    preventDefault, false);
-window.addEventListener('dragleave',    preventDefault, false);
-window.addEventListener('dragend',      preventDefault, false);
+window.addEventListener('dragstart',    defaultBehaviour, false);
+window.addEventListener('drag',         defaultBehaviour, false);
+window.addEventListener('dragenter',    defaultBehaviour, false);
+window.addEventListener('dragleave',    defaultBehaviour, false);
+window.addEventListener('dragend',      defaultBehaviour, false);
 window.addEventListener('dragover',     dragOverHandle, false);
 window.addEventListener('drop',         dropHandle, false);
 
@@ -65,4 +65,5 @@ $audio.onplay = function () {
 $audio.ontimeupdate = function () {
     controls.positionSlider.value = ($audio.currentTime * controls.positionSlider.max) / $audio.duration;
 };
+
 
