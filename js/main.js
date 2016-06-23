@@ -1,7 +1,6 @@
 var playlist  = Playlist();
 var animation = null;
 
-var $dropHere   = document.getElementById('dropHereMsg');
 var $audio      = document.getElementById('audio');
 
 /**
@@ -29,29 +28,21 @@ function preventDefault(event) {
 
 function dragOverHandle(event) {
     preventDefault(event);
-    $dropHere.className = '';
     event.dataTransfer.dropEffect = 'copy';
-}
-
-
-function dragLeaveHandle(event) {
-    preventDefault(event);
-    $dropHere.className += 'hidden';
 }
 
 function dropHandle(event) {
     preventDefault(event);
-    $dropHere.className += 'hidden';
     fileHandle(event);
 }
 
 window.addEventListener('dragstart',    preventDefault, false);
 window.addEventListener('drag',         preventDefault, false);
 window.addEventListener('dragenter',    preventDefault, false);
-window.addEventListener('dragleave',    dragLeaveHandle, false);
+window.addEventListener('dragleave',    preventDefault, false);
+window.addEventListener('dragend',      preventDefault, false);
 window.addEventListener('dragover',     dragOverHandle, false);
 window.addEventListener('drop',         dropHandle, false);
-window.addEventListener('dragend',      preventDefault, false);
 
 
 /**

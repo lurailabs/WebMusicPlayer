@@ -5,6 +5,7 @@ var Playlist = function() {
     var $playlist 	        = document.getElementById('playlist');
 
     var addSong = function(song) {
+        document.querySelector('#dropHereMsg').classList.add('hidden');
         songs.push(song);
         addToPlaylistWidget(song);
         if (songs.length === 1) {
