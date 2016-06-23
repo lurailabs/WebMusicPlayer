@@ -42,7 +42,7 @@ controls.backBtn.addEventListener('click',      function() {
     if (!$audio.src) return;
     var song = playlist.goBack();
     if (song) {
-        $audio.src = song.getBlobUrl();
+        $audio.src = song.blobUrl;
         $audio.play();
     }
 });
@@ -51,7 +51,7 @@ controls.forwardBtn.addEventListener('click',   function() {
     if (!$audio.src) return;
     var song = playlist.goForward();
     if (song) {
-        $audio.src = song.getBlobUrl();
+        $audio.src = song.blobUrl;
         $audio.play();
     }
 } );
