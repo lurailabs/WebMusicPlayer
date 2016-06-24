@@ -7,9 +7,8 @@
     <meta name="description" content="Web based music player. Drag and drop your music files and enjoy.
     Nothing is uploaded to the server.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
-	<meta charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 
 <body>
@@ -23,20 +22,20 @@
 	<div id="controls">
         <div class="row-1">
             <div id="backBtn" class="playerBtn">
-            <i class="fa fa-fast-backward"></i>
-            <span class="btnInfo">previous song</span>
+            <i class="icon-to-start-alt"></i>
+            <span class="btnInfo">previous track</span>
         </div>
             <div id="playBtn" class="playerBtn">
-                <i class="fa fa-play"></i>
+                <i class="icon-play"></i>
                 <span class="btnInfo">play</span>
             </div>
             <div id="pauseBtn" class="playerBtn hidden">
-                <i class="fa fa-pause"></i>
+                <i class="icon-pause"></i>
                 <span class="btnInfo">pause</span>
             </div>
             <div id="forwardBtn" class="playerBtn">
-                <i class="fa fa-fast-forward"></i>
-                <span class="btnInfo">next song</span>
+                <i class="icon-to-end-alt"></i>
+                <span class="btnInfo">next track</span>
             </div>
 
             <div class="playerBtn">
@@ -45,8 +44,13 @@
             </div>
 
             <div id="showPlaylistBtn" class="playerBtn">
-                PLAYLIST
+                <p>PLAYLIST</p>
                 <span class="btnInfo">toggle playlist</span>
+            </div>
+
+            <div id="showInfoBtn" class="playerBtn">
+                <i class="icon-info-circled"></i>
+                <span class="btnInfo">info</span>
             </div>
         </div> <!-- /row-1 -->
 
@@ -56,12 +60,12 @@
 
 	</div> <!-- /controls -->
 
+    <div id="dropHereMsg">Drop your music files here</div>
+
 	<div id="player">
 
-		<div id="dropHereMsg">Drop your music files here</div>
-
         <div id="songInfo">
-            <img src="img/record.png" />
+            <img src="img/turntable.png" />
             <div class="info title"> </div>
             <div class="info artist"> </div>
         </div>
@@ -75,7 +79,34 @@
         <div id="playlist" class="playlist hidden">
         </div> <!-- /playlist -->
 
+
+        <div id="pageInfo" class="hidden">
+             <div class="overlay"></div>
+            <div class="info">
+                <h2>Web Music Player</h2>
+                <p>
+                    Drag and drop your music files and enjoy. Nothing will travel to the server, everything happens in your browser.
+                    Track info and cover image is fetched from the audio file ID3 tags, when present.
+                    Click on the animation to change it. This webapp is still work in process.
+                </p>
+                <!--<h4>Author:</h4>-->
+                <p>
+                    Made by <a href="http://lurailabs.com">Lurai</a>.
+                    You can find me on <a href="https://twitter.com/lurailabs" target="_blank">Twitter</a>, or take a look at the code on <a href="https://github.com/lurailabs/WebMusicPlayer" target="_blank">GitHub</a>.
+                </p>
+                <h4>Credits:</h4>
+                <p>
+                    Player icons by <a href="http://fortawesome.github.com/Font-Awesome/" target="_blank">Font Awesome</a>.
+                    <br>Turntable image designed by <a href="http://www.freepik.com" target="_blank">Freepik</a> from www.flaticon.com.
+                </p>
+                <button onclick="document.getElementById('pageInfo').classList.add('hidden')">OK</button>
+            </div>
+        </div>
+
 	</div> <!-- /player -->
+
+
+
 
 
     <script src="js/id3Tags/stringDecoder.js"></script>

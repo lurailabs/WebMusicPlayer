@@ -5,7 +5,7 @@ var Song = function(file) {
     var artist      = '';
     var album       = '';
     var playlistImg = 'img/song-icon-72.png';
-    var mainImg     = 'img/record.png';
+    var mainImg     = 'img/turntable.png';
 
     var $coverImg   = document.querySelector('#songInfo img');
     var $artist     = document.querySelector('#songInfo .artist');

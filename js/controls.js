@@ -6,9 +6,8 @@ var controls = {
     forwardBtn:     document.getElementById('forwardBtn'),
     volumeBtn:	    document.getElementById('volumeBtn'),
     playlistBtn:    document.getElementById('showPlaylistBtn'),
-    
-    positionSlider: document.getElementById('positionSlider')
-
+    positionSlider: document.getElementById('positionSlider'),
+    showInfoBtn:    document.getElementById('showInfoBtn')
 };
 
 
@@ -59,6 +58,13 @@ controls.forwardBtn.addEventListener('click',   function() {
 
 controls.positionSlider.addEventListener('input', function() {
     if($audio.src) $audio.currentTime = ($audio.duration * this.value) / this.max;
+});
+
+controls.showInfoBtn.addEventListener('click', function() {
+    var $pageInfo = document.getElementById('pageInfo');
+    $pageInfo.classList.contains('hidden') ?
+        $pageInfo.classList.remove('hidden') :
+        $pageInfo.classList.add('hidden');
 });
 
 
