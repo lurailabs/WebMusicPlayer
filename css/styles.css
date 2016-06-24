@@ -87,7 +87,7 @@ h1, h2, h3, h4 {
 }
 
 #songInfo img {
-    height:             80%;
+    height:             78%;
     margin-left:        5%;
     margin-right:       5%;
     text-align:         center;
@@ -177,6 +177,10 @@ canvas {
 
 .playerBtn:hover .btnInfo {
     display:            block;
+}
+
+.playerBtn:active {
+    color: #c61515;
 }
 
 
@@ -279,11 +283,14 @@ canvas {
     top:                30%;
     left:               30%;
     right:              30%;
+    max-height:         50%;
     border:             1px solid deeppink;
     border-radius:      5px;
-    background-color:   #a4dde6;
+    background-color:   white;
     padding:            20px;
     z-index:            2000;
+    text-align:         center;
+    overflow-y:         auto;
 }
 
 #pageInfo h2 {
@@ -300,28 +307,36 @@ canvas {
 }
 
 #pageInfo p {
-    color:              #888888;
+    color: #a3a3a3;
     font-size:          0.9em;
 
 }
 
 #pageInfo a {
     text-decoration:    none;
-    color:              #666666;
+    color:              #6c8b94;
+    font-weight:        bold;
 }
 
 #pageInfo a:hover {
-    color:              #393939;
+    text-decoration:    underline;
 }
 
-#pageInfo button {
-    margin:             0 40%;
+#pageInfo .btn {
+    margin:             20px 40% 0 40%;
     text-align:         center;
-    padding:            8px 15px 8px 15px;
-    box-shadow:         rgba(245, 79, 156, 0.8) 0 0 2px, rgba(0, 0, 0, 0.16) 0 0 0 1px inset;
+    padding:            8px 25px 8px 25px;
     border-radius:      5px;
-    background-color:   #74959e;
+    border:             0;
+    background-color:   #a4dde6;
     color:              white;
     font-size:          1em;
-    font-weight:        bold;
+}
+
+#pageInfo .btn:hover {
+    background-color: #99d0d9;
+}
+
+#pageInfo .btn:active {
+    background-color: #85b4bc;
 }
