@@ -12,14 +12,13 @@ function id3tags(song, done) {
 
             getID3v1Tags(new DataView(buffer), function(tags) {
                 id3tags.v1 = tags;
-                done(id3tags, 'readV1');
+                done(id3tags);
             });
         });
         reader.readAsArrayBuffer(first128);
     };
 
     var checkV2 = function() {
-        console.log('en checkV2');
         var reader  = new FileReader();
         var first3 = song.file.slice(0, 3);
         reader.addEventListener('load', function(event) {
@@ -28,7 +27,7 @@ function id3tags(song, done) {
                 reader = null;
                 getID3v2Tags(song.file, function(tags) {
                     id3tags.v2 = tags;
-                    done(id3tags, 'checkV2');
+                    done(id3tags);
                 });
             } else {
                 id3tags.v2 = null;

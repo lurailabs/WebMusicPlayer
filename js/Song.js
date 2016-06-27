@@ -14,8 +14,7 @@ var Song = function(file) {
     
     
     this.getId3tags = function() {
-        id3tags(this, function(tags, who) {
-            console.log('Who returns: ' + who);
+        id3tags(this, function(tags) {
             console.log(tags);
             if (tags.v1 && !(tags.v2)) {
                 title  = tags.v1.title;

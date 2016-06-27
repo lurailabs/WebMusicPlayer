@@ -216,12 +216,12 @@ function getID3v2Tags(file, done) {
                 var frameSize  = dv.getUint32(4); //getFrameSize(dv);
 
                 position += 10;
-                console.log('frame Id: ' + frameId);
-                console.log('frame size: ' + frameSize);
+                //console.log('frame Id: ' + frameId);
+                //console.log('frame size: ' + frameSize);
                 if (frameIds.indexOf(frameId) === -1) {
                     position++;
                     if (position >= dv.byteLength - 10) {
-                        console.log('out of id3 tags bounds');
+                        //console.log('out of id3 tags bounds');
                         done(id3v2);
                     }
                     else getFrameHeader();
@@ -253,11 +253,14 @@ function getID3v2Tags(file, done) {
         return frameId;
     };
 
+    /*  ---  Using dv.getUint32(4) instead ----
+    
     var getFrameSize = function(dataView) {
 
         return (dataView.getUint8(4) << 21) | (dataView.getUint8(5) << 14) |
             (dataView.getUint8(6) << 7) | dataView.getUint8(7);
     };
+    */
 
     var getFrameFlags = function(dataView) {
 
@@ -277,7 +280,7 @@ function getID3v2Tags(file, done) {
                 var encoding = getTextEncoding(dv.getUint8(0));
                 id3v2[frameId].encoding = encoding;
                 id3v2[frameId].data = Decoder[encoding](dv);
-                console.log(id3v2[frameId].data);
+                //console.log(id3v2[frameId].data);
                 position += size;
                 if (position >= id3v2.header.bodySize - position) done(id3v2);
                 else getFrameHeader();
@@ -287,8 +290,8 @@ function getID3v2Tags(file, done) {
 
 
     var getPicFrameData = function(frameId, size) {
-        console.log('Fetching pic frame data...');
-        read(position + 150, //position + size,
+        //console.log('Fetching pic frame data...');
+        read(position + 150, 
             'readAsArrayBuffer',
             function(buffer) {
                 var dv = new DataView(buffer);
@@ -316,7 +319,7 @@ function getID3v2Tags(file, done) {
                     'Band/artist logotype',
                     'Publisher/Studio logotype'
                 ];
-                var mimeType    = '', description = '', data = '';
+                var mimeType    = '', description = '';
 
                 var encoding    = getTextEncoding(dv.getUint8(0));
                 var dvPosition = 1;

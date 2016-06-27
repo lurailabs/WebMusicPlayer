@@ -6,9 +6,12 @@
 	<title>Web Music Player</title>
     <meta name="description" content="Web based music player. Drag and drop your music files and enjoy.
     Nothing is uploaded to the server.">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <!-- inject:css -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <!-- endinject -->
 </head>
 
 <body>
@@ -85,21 +88,32 @@
             <div class="info">
                 <h2>Web Music Player</h2>
                 <p>
-                    Drag and drop your music files and enjoy. Nothing will travel to the server, everything happens in your browser.
+                    Drag and drop your music files to add them to the playlist. Nothing will travel to the server,
+                    everything happens in your browser.
                     Track info and cover image is fetched from the audio file ID3 tags, when present.
-                    Click on the animation to change it. This webapp is still work in process.
+                    Click on the animation to change it.
                 </p>
                 <!--<h4>Author:</h4>-->
                 <p>
                     Made by <a href="http://lurailabs.com">Lurai</a>.<br>
-                    You can find me on <a href="https://twitter.com/lurailabs" target="_blank">Twitter</a>, or take a look at the code on <a href="https://github.com/lurailabs/WebMusicPlayer" target="_blank">GitHub</a>.
+                    You can find me on <a href="https://twitter.com/lurailabs" target="_blank">Twitter</a>, or take a
+                    look at the code on <a href="https://github.com/lurailabs/WebMusicPlayer" target="_blank">GitHub</a>.
                 </p>
-                <h4>Credits:</h4>
+                <h4>TO DO</h4>
+                <p>
+                    This webapp is still work in process. Some plans for the future: better animations, improved playlist
+                    management, integration with SoundCloud tracks and other services, save playlist locally
+                    and load it next time.
+                </p>
+                <h4>CREDITS</h4>
                 <p>
                     Player icons by <a href="http://fortawesome.github.com/Font-Awesome/" target="_blank">Font Awesome</a>.
-                    <br>Turntable image designed by <a href="http://www.freepik.com" target="_blank">Freepik</a> from www.flaticon.com.
+                    <br>Turntable image designed by <a href="http://www.freepik.com" target="_blank">Freepik</a> from
+                    www.flaticon.com.
+                    <br>Font: Roboto by Christian Robertson -
+                    <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank"> Apache License, version 2.0</a>.
                 </p>
-                <button class="btn"onclick="document.getElementById('pageInfo').classList.add('hidden')">OK</button>
+                <button class="btn" onclick="document.getElementById('pageInfo').classList.add('hidden')">OK</button>
             </div>
         </div>
 
@@ -107,8 +121,7 @@
 
 
 
-
-
+    <!-- inject:js -->
     <script src="js/id3Tags/stringDecoder.js"></script>
     <script src="js/id3Tags/ID3v1.js"></script>
     <script src="js/id3Tags/ID3v2.js"></script>
@@ -118,5 +131,6 @@
     <script src="js/controls.js"></script>
 	<script src="js/animation.js"></script>
     <script src="js/main.js"></script>
+    <!-- endinject -->
 </body>
 </html>

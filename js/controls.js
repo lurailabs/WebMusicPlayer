@@ -7,9 +7,8 @@ var controls = {
     volumeBtn:	    document.getElementById('volumeBtn'),
     playlistBtn:    document.getElementById('showPlaylistBtn'),
     positionSlider: document.getElementById('positionSlider'),
-    showInfoBtn:    document.getElementById('showInfoBtn')
+    showInfoBtn:    document.getElementById('showInfoBtn'),
 };
-
 
 controls.playlistBtn.addEventListener('click',  function() {
     playlist.togglePlaylist();
@@ -17,7 +16,6 @@ controls.playlistBtn.addEventListener('click',  function() {
 
 controls.volumeBtn.addEventListener('input',    function() {
     if($audio.src) $audio.volume = this.value / this.max;
-    console.log('VOLUME: ' + $audio.volume);
 });
 
 controls.playBtn.addEventListener('click',      function() {

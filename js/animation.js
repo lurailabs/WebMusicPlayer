@@ -1,13 +1,19 @@
 var Animation = function() {
     
-    var pause       = false;
+    var paused      = false;
 
     var canvas		= document.querySelector('canvas');
     var canvasCtx   = canvas.getContext('2d');
+
     var WIDTH       = canvas.width;
     var HEIGHT      = canvas.height;
     var lineColor   = 'white';
     var bgColor     = '#473C3C';
+
+    var gradient = canvasCtx.createLinearGradient(0,0,0,HEIGHT);
+    gradient.addColorStop(0.4,'red');
+    gradient.addColorStop(0.7,'yellow');
+    gradient.addColorStop(1,  'green');
 
     var constructor     = window.AudioContext || window.webkitAudioContext;
     var context 		= new constructor();
@@ -48,13 +54,15 @@ var Animation = function() {
         canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
         for (var i = 0; i < bufferLength; i++) {
-            canvasCtx.fillStyle = 'green';
+            canvasCtx.fillStyle = gradient;
+            //canvasCtx.fillStyle = 'green';
             y = HEIGHT - freqArray[i]*100 / 255;
-            canvasCtx.fillRect(x, y, barWidth, freqArray[i]*100 / 255);
+            canvasCtx.fillRect(x+3, y, barWidth-3, freqArray[i]*100 / 255);
+            //canvasCtx.fillRect(x, y, barWidth, freqArray[i]*100 / 255);
             x += barWidth;
         }
 
-        if (!pause) window.requestAnimationFrame(drawBars);
+        if (!paused) window.requestAnimationFrame(drawBars);
     };
 
     var drawCurve = function() {
@@ -93,14 +101,14 @@ var Animation = function() {
 
 
     var start = function() {
-        pause = false;
+        paused = false;
         if (!analyser) connectAnalyser();
         animationType[animationNum]();
     };
     
     var pause = function() {
-        pause = true;
-        animationType[animationNum]();
+        paused = true;
+        //animationType[animationNum]();
     };
 
     return {
