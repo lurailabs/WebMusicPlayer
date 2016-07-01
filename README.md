@@ -6,7 +6,7 @@ Track info and cover image is fetched from the audio file ID3 tags, when present
 Click on the animation to change it.
 
 
-TO DO
+TO DO:
 This webapp is still work in process. Some plans for the future: better animations, improved playlist management (drag&drop), 
 integration with SoundCloud tracks and other services, save playlist locally and load it next time.
 
