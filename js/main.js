@@ -1,5 +1,5 @@
-var playlist  = Playlist();
-var animation = null;
+var playlist  = playlist();
+var animation = animation();
 
 var $audio      = document.getElementById('audio');
 
@@ -51,7 +51,7 @@ window.addEventListener('drop',         dropHandle, false);
 
 $audio.onended = function () {
     var song = playlist.goForward();
-    if (song) {
+    if (song instanceof Song) {
         $audio.src = song.blobUrl;
         $audio.play();
     }

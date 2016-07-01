@@ -1,4 +1,4 @@
-var Animation = function() {
+var animation = function() {
     
     var paused      = false;
 
@@ -9,7 +9,6 @@ var Animation = function() {
     var HEIGHT      = canvas.height;
     var lineColor   = 'white';
     var bgColor     = '#473C3C';
-
     var gradient = canvasCtx.createLinearGradient(0,0,0,HEIGHT);
     gradient.addColorStop(0.4,'red');
     gradient.addColorStop(0.7,'yellow');
@@ -47,6 +46,7 @@ var Animation = function() {
     };
 
     var drawBars = function() {
+
         analyser.getByteFrequencyData(freqArray);
         var barWidth = WIDTH / bufferLength;
         var x = 0, y = 0;
@@ -90,12 +90,11 @@ var Animation = function() {
 
         canvasCtx.lineTo(WIDTH, HEIGHT/2);
         canvasCtx.stroke();
-
-        if (!pause) window.requestAnimationFrame(drawCurve);
+        if (!paused) window.requestAnimationFrame(drawCurve);
     };
 
     canvas.addEventListener('click', function() {
-        animationNum = (animationNum >= animationType.length - 1) ? 0 : animationNum + 1;
+        animationNum = (animationNum + 1) % animationType.length;
         animationType[animationNum]();
     });
 
@@ -108,7 +107,6 @@ var Animation = function() {
     
     var pause = function() {
         paused = true;
-        //animationType[animationNum]();
     };
 
     return {
