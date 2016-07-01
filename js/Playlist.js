@@ -1,4 +1,4 @@
-var Playlist = function() {
+var playlist = function() {
 
     var songs               = [];
     var currentSongIndex    = null;
@@ -12,10 +12,7 @@ var Playlist = function() {
             setCurrentSongIndex(0);
             $audio.src = song.blobUrl;
             $audio.play();
-            if (!animation) {
-                animation = Animation();
-                animation.start();
-            }
+            animation.start();
         }
         song.getId3tags();
     };
@@ -54,7 +51,7 @@ var Playlist = function() {
 
         } else if (index === currentSongIndex) {
             var newSong = (currentSongIndex < songs.length-1) ? goForward() : goBack();
-            if (newSong) {
+            if (newSong instanceof Song) {
                 $audio.src = newSong.blobUrl;
                 $audio.play();
             } else {
@@ -111,7 +108,6 @@ var Playlist = function() {
         }
     });
     
-    /* ID3 tags decoder is async. Tis function is called when tags are ready  */
     var tagsReady = function() {
         redrawWidget();
         songs[currentSongIndex].showInfo();

@@ -1,3 +1,5 @@
+"use strict";
+
 var playlist  = playlist();
 var animation = animation();
 
