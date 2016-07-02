@@ -1,3 +1,5 @@
+'use strict';
+
 var controls = {
     backBtn: 	    document.getElementById('backBtn'),
     playBtn: 	    document.getElementById('playBtn'),
@@ -7,7 +9,7 @@ var controls = {
     volumeBtn:	    document.getElementById('volumeBtn'),
     playlistBtn:    document.getElementById('showPlaylistBtn'),
     positionSlider: document.getElementById('positionSlider'),
-    showInfoBtn:    document.getElementById('showInfoBtn'),
+    showInfoBtn:    document.getElementById('showInfoBtn')
 };
 
 controls.playlistBtn.addEventListener('click',  function() {

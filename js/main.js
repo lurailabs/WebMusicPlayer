@@ -1,9 +1,6 @@
 "use strict";
 
-var playlist  = playlist();
-var animation = animation();
-
-var $audio      = document.getElementById('audio');
+var $audio = document.getElementById('audio');
 
 /**
  *    FILE DRAG & DROP EVENTS

@@ -1,4 +1,6 @@
-var animation = function() {
+var animation = (function() {
+    
+    'use strict';
     
     var paused      = false;
 
@@ -113,4 +115,4 @@ var animation = function() {
         start: start,
         pause: pause
     };
-};
+})();

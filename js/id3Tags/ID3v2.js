@@ -1,5 +1,7 @@
 function getID3v2Tags(file, done) {
 
+    'use strict';
+
     console.log('file length: ' + file.size);
     var position = 0;
 

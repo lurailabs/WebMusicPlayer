@@ -1,3 +1,5 @@
+'use strict';
+
 var Decoder = {
     
     'getBitsFromByte': function(byte) {

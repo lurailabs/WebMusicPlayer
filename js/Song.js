@@ -1,3 +1,5 @@
+'use strict';
+
 var Song = function(file) {
     this.file           = file;
     this.blobUrl        = URL.createObjectURL(file);
@@ -20,7 +22,7 @@ Song.prototype.getId3tags = function() {
         if (tags.v2) {
             if(tags.v2.APIC) {
                 that.playlistImg  = tags.v2.APIC.base64_data;
-                that.mainImg = that.playlistImg;
+                that.mainImg      = that.playlistImg;
             }
             if(tags.v2.TIT2) that.title  = tags.v2.TIT2.data;
             if(tags.v2.TPE1) that.artist = tags.v2.TPE1.data;

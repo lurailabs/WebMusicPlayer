@@ -1,5 +1,7 @@
 function id3tags(song, done) {
 
+    'use strict';
+
     var id3tags = {};
 
     var readV1 = function() {

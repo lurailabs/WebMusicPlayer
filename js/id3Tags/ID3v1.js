@@ -1,4 +1,6 @@
 function getID3v1Tags(dataView, done) {
+
+    'use strict';
     
     var id3v1 = null;
     
